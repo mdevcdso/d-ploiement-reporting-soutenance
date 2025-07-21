@@ -10,14 +10,12 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckedTextView
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ghostapp.fragments.HeaderDefaultFragment
 import com.example.ghostapp.fragments.HeaderDetailFragment
 import com.example.ghostapp.services.MapServices
 import com.example.ghostapp.services.PhotoServices
@@ -29,6 +27,7 @@ import java.io.File
 import java.util.Locale
 import kotlin.concurrent.thread
 
+@Suppress("DEPRECATION")
 class AddReportActivity : AppCompatActivity() {
     private lateinit var addReportActivitySpinner: Spinner
     private lateinit var addReportActivityAdresse : EditText
@@ -195,7 +194,7 @@ class AddReportActivity : AppCompatActivity() {
                 addReportActivityCodePostal.setText(address.postalCode ?: "")
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Erreur lors de la récupération de l'adresse", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Erreur lors de la récupération de l'adresse $e", Toast.LENGTH_SHORT).show()
         }
     }
 

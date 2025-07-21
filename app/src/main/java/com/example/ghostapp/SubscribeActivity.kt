@@ -1,31 +1,21 @@
 package com.example.ghostapp
 
-import android.adservices.ondevicepersonalization.EventInput
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ghostapp.MainActivity
 import com.example.ghostapp.services.AuthServices
 import org.json.JSONObject
-import org.w3c.dom.Text
-import kotlin.collections.get
 import kotlin.concurrent.thread
-import kotlin.math.max
-import kotlin.text.get
-import kotlin.toString
 
 class SubscribeActivity : AppCompatActivity() {
     val authServices = AuthServices()
@@ -142,7 +132,7 @@ class SubscribeActivity : AppCompatActivity() {
             }
             if(step == 3) {
                 val phoneNumber = subscribeActivityInput.text.toString()
-                if(!phoneNumber.matches(Regex("^\\+?[0-9]{10,15}\$"))) {
+                if(!phoneNumber.matches(Regex("^\\+?[0-9]{10,15}$"))) {
                     subscribeActivityInput.error = "Le numéro de téléphone n'est pas valide"
                     return@setOnClickListener
                 }

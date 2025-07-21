@@ -1,32 +1,24 @@
-package com.example.ghostapp.Adapter
+package com.example.ghostapp.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.util.JsonToken
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.ghostapp.BestiaryDetailsActivity
-import com.example.ghostapp.MapActivity
 import com.example.ghostapp.R
 import com.example.ghostapp.services.HttpEnv
 import com.example.ghostapp.services.PhotoServices
 import org.json.JSONArray
 import org.json.JSONObject
-import kotlin.compareTo
 import kotlin.concurrent.thread
-import kotlin.math.log
-import kotlin.toString
 
 class DataBestiaryAdapter(val data: JSONArray, userToken: String): RecyclerView.Adapter<DataBestiaryViewHolder>() {
     private val photoServices = PhotoServices()
@@ -116,38 +108,13 @@ class DataBestiaryAdapter(val data: JSONArray, userToken: String): RecyclerView.
         }
     }
 
-
-    fun getPhotoUrl(monsterId: String): String {
-        var photoUrl = ""
-        thread {
-            photoUrl = photoServices.getPhoto(
-                "bestiary",
-                monsterId,
-                userToken,
-                onSuccess = { responseBody: String? ->
-                    if (responseBody != null && responseBody.isNotEmpty()) {
-                        val jsonResponse = JSONObject(responseBody)
-                        val photos = jsonResponse.getJSONArray("photos")
-                        if (photos.length() > 0) {
-                            photoUrl = photos[0].toString()
-                        }
-                    }
-                },
-                onError = { errorMessage: String ->
-                    Log.e("photoAdapter", "Error: $errorMessage")
-                }
-            ).toString()
-        }
-        return photoUrl
-    }
-
 }
 
 class DataBestiaryViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     val nameTextView: TextView = itemView.findViewById(R.id.vh_name)
     val typeTextView: TextView = itemView.findViewById(R.id.vh_type)
     val levelTextView: TextView = itemView.findViewById(R.id.vh_level)
-    private val photoImageView: ImageView = itemView.findViewById(com.example.ghostapp.R.id.vh_photo)
+    private val photoImageView: ImageView = itemView.findViewById(R.id.vh_photo)
     fun getImageView(): ImageView = photoImageView
     val levelCardView: com.google.android.material.card.MaterialCardView = itemView.findViewById(R.id.vh_level_card_view)
     val moreInfoButton: Button = itemView.findViewById(R.id.vh_more_button)

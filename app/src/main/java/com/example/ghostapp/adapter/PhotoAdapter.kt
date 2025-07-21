@@ -1,6 +1,5 @@
-package com.example.ghostapp.Adapter
+package com.example.ghostapp.adapter
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -8,11 +7,9 @@ import com.example.ghostapp.R
 import com.example.ghostapp.services.HttpEnv
 import org.json.JSONObject
 import com.bumptech.glide.Glide
-import com.example.ghostapp.services.PhotoServices
 
 class PhotoAdapter(data : JSONObject): RecyclerView.Adapter<PhotoViewHolder>() {
     private val photos = data.getJSONArray("photos")
-    private val photoServices = PhotoServices()
     private val httpEnv = HttpEnv()
     private val baseUrl = httpEnv.baseUrl
 
@@ -39,12 +36,13 @@ class PhotoAdapter(data : JSONObject): RecyclerView.Adapter<PhotoViewHolder>() {
                 .into(holder.getImageView())
 
         } catch (e: Exception) {
+            Log.e("PhotoAdapter", "Error loading photo at position $position", e)
             holder.getImageView().setImageResource(R.drawable.ic_launcher_background)
         }
     }
 }
 
 class PhotoViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
-    private val photoImageView: ImageView = itemView.findViewById(com.example.ghostapp.R.id.photo_image_view)
+    private val photoImageView: ImageView = itemView.findViewById(R.id.photo_image_view)
     fun getImageView(): ImageView = photoImageView
 }

@@ -1,18 +1,15 @@
-package com.example.ghostapp.Adapter
+package com.example.ghostapp.adapter
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.BestiaryDetailsActivity
-import com.example.ghostapp.MapActivity
 import com.example.ghostapp.R
 import com.example.ghostapp.ReportDetailsActivity
 import org.json.JSONArray
@@ -27,6 +24,7 @@ private fun formatISODate(isoDate: String): String {
         val date = inputFormat.parse(isoDate)
         return date?.let { outputFormat.format(it) } ?: "Date inconnue"
     } catch (e: Exception) {
+        Log.e("DataReportAdapter", "Erreur de formatage de la date ISO: $isoDate", e)
         return isoDate
     }
 }

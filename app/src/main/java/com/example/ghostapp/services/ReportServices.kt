@@ -1,6 +1,5 @@
 package com.example.ghostapp.services
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request

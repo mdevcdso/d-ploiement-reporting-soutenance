@@ -11,10 +11,11 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/header_container"
-        android:name="com.example.ghostapp.fragments.HeaderDefaultFragment"
+        android:name="com.example.ghostapp.fragments.HeaderDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_header_detail" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,14 +31,21 @@
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
 
+            <androidx.appcompat.widget.SearchView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <EditText
                 android:id="@+id/bestiary_activity_search_edit_text"
                 android:layout_width="match_parent"
+                android:maxWidth="350dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/bestiary_search_hint"
                 android:drawableStart="@drawable/white_search_vector_icon"
+                android:hint="@string/bestiary_search_hint"
                 android:inputType="text"
-                android:padding="10dp"/>
+                android:autofillHints="search"
+                android:padding="13dp"/>
         </com.google.android.material.card.MaterialCardView>
 
 
@@ -48,6 +56,7 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             android:orientation="vertical"
+            android:contentDescription="@string/bestiary_monster_list"
             />
 
     </LinearLayout>
@@ -57,7 +66,8 @@
         android:name="com.example.ghostapp.fragments.NavigationFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_navigation"/>
 
 
 </LinearLayout>

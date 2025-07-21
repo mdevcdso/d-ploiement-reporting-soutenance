@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,18 +14,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.Adapter.PhotoAdapter
+import com.example.ghostapp.adapter.PhotoAdapter
 import com.example.ghostapp.fragments.HeaderDetailFragment
 import com.example.ghostapp.services.PhotoServices
 import com.example.ghostapp.services.ReportServices
-import okhttp3.Address
 import org.json.JSONObject
 import kotlin.concurrent.thread
 
 class ReportDetailsActivity : AppCompatActivity() {
-
-    lateinit var reportDetailActivityAppLogo: ImageView
-    lateinit var reportDetailsActivityBackArrow: ImageView
 
     lateinit var reportDetailsActivityAddress: TextView
     lateinit var reportDetailsActivityCreationDate: TextView
@@ -165,6 +160,7 @@ class ReportDetailsActivity : AppCompatActivity() {
             val date = inputFormat.parse(isoDate)
             return date?.let { outputFormat.format(it) } ?: "Date inconnue"
         } catch (e: Exception) {
+            Log.e("Error", "Error parsing date: $isoDate", e)
             return isoDate
         }
     }

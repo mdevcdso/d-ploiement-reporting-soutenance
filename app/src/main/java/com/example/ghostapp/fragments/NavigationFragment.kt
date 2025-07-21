@@ -12,6 +12,7 @@ import com.example.ghostapp.MapActivity
 import com.example.ghostapp.R
 import com.example.ghostapp.ReportActivity
 
+@Suppress("DEPRECATION")
 class NavigationFragment : Fragment() {
 
     override fun onCreateView(

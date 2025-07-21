@@ -14,7 +14,8 @@
         android:name="com.example.ghostapp.fragments.HeaderDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_header_detail" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -49,8 +50,10 @@
                     android:id="@+id/add_report_activity_report_type_spinner"
                     style="@style/SpinnerStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:entries="@array/report_types" />
+                    android:layout_height="48dp"
+                    android:entries="@array/report_types"
+                    android:contentDescription="@string/report_type_spinner_description" />
+
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -73,11 +76,13 @@
 
                 <EditText
                     android:id="@+id/add_report_activity_address_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="488dp"
                     android:layout_height="wrap_content"
                     android:hint="@string/report_address"
+                    android:autofillHints="postalAddress"
                     android:inputType="textPostalAddress"
-                    android:padding="10dp"/>
+                    android:importantForAutofill="yes"
+                    android:padding="13dp"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -97,11 +102,13 @@
 
                     <EditText
                         android:id="@+id/add_report_activity_ville_edit_text"
-                        android:layout_width="match_parent"
+                        android:layout_width="448dp"
                         android:layout_height="wrap_content"
                         android:hint="@string/report_city"
+                        android:autofillHints="postalAddress"
                         android:inputType="textPostalAddress"
-                        android:padding="10dp"/>
+                        android:importantForAutofill="yes"
+                        android:padding="13dp"/>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -116,11 +123,14 @@
 
                     <EditText
                         android:id="@+id/add_report_activity_code_postal_edit_text"
-                        android:layout_width="match_parent"
+                        android:layout_width="448dp"
                         android:layout_height="wrap_content"
+                        android:autofillHints="postalAddress"
                         android:hint="@string/report_code_postal"
+                        android:importantForAutofill="yes"
                         android:inputType="textPostalAddress"
-                        android:padding="10dp"/>
+                        android:padding="13dp"
+                        android:textColorHint="#616161" />
 
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
@@ -157,13 +167,14 @@
 
                 <EditText
                     android:id="@+id/add_report_activity_description_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="448dp"
                     android:layout_height="150dp"
                     android:gravity="top|start"
                     android:inputType="textMultiLine"
                     android:hint="@string/report_description_hint"
-                    android:padding="10dp"
-                    android:background="@null" />
+                    android:autofillHints="postalAddress"
+                    android:importantForAutofill="yes"
+                    android:padding="10dp"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -171,24 +182,23 @@
                 android:id="@+id/add_report_activity_photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ajouter des photos"
+                android:text="@string/add_photos"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/button_grey"
                 android:textSize="15sp"
                 android:padding="10dp"
-                android:layout_gravity="end"
-                />
+                android:layout_gravity="end" />
 
             <Button
                 android:id="@+id/add_report_activity_submit_button"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="@string/add_report"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/button_grey"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:padding="10dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_gravity="center"/>
 
 
         </LinearLayout>

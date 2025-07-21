@@ -4,19 +4,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.Adapter.DataBestiaryAdapter
-import com.example.ghostapp.MainActivity
+import com.example.ghostapp.adapter.DataBestiaryAdapter
 import com.example.ghostapp.fragments.HeaderDefaultFragment
 import com.example.ghostapp.services.BestiaryServices
 import org.json.JSONArray
@@ -24,14 +19,8 @@ import org.json.JSONObject
 import kotlin.concurrent.thread
 
 class BestiaryActivity : AppCompatActivity() {
-    lateinit var bestiaryActivityLogo : ImageView
-
     lateinit var bestiaryActivitySearchEditText: EditText
     lateinit var bestiaryActivityListMonsters: RecyclerView
-
-    lateinit var mapActivityMapButton: ImageView
-    lateinit var mapActivityReportButton: ImageView
-    lateinit var mapActivityBestiaryButton: ImageView
 
     lateinit var monsterData: String
     lateinit var filteredMonsterData : String

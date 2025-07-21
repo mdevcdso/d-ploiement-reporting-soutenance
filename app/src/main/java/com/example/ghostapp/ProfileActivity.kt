@@ -15,7 +15,6 @@ import org.json.JSONObject
 import kotlin.concurrent.thread
 import androidx.core.content.edit
 import com.example.ghostapp.fragments.HeaderDetailFragment
-import kotlin.or
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -25,7 +24,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var profileActivityUserPhone: TextView
     private lateinit var profileActivityLogoutBtn: Button
 
-    private lateinit var userInfo: Map<String, String>
+    //private lateinit var userInfo: Map<String, String>
     private var authServices: AuthServices = AuthServices()
 
     @SuppressLint("SetTextI18n")
@@ -76,7 +75,7 @@ class ProfileActivity : AppCompatActivity() {
             )
         }
         profileActivityLogoutBtn.setOnClickListener {
-            getSharedPreferences("save", MODE_PRIVATE).edit() { clear() }
+            getSharedPreferences("save", MODE_PRIVATE).edit { clear() }
             val intent = Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or
                         Intent.FLAG_ACTIVITY_CLEAR_TOP or

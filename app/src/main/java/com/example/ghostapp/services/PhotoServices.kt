@@ -3,7 +3,6 @@ package com.example.ghostapp.services
 import android.util.Log
 import okhttp3.MediaType.Companion.toMediaType
 import java.io.File
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 

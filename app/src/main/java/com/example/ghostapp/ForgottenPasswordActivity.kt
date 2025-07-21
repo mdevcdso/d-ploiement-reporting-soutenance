@@ -1,7 +1,6 @@
 package com.example.ghostapp
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button

@@ -1,6 +1,5 @@
-package com.example.ghostapp.Adapter
+package com.example.ghostapp.adapter
 
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +8,6 @@ import com.example.ghostapp.services.HttpEnv
 import org.json.JSONObject
 import com.bumptech.glide.Glide
 import com.example.ghostapp.services.PhotoServices
-import okhttp3.internal.userAgent
 
 
 class SuppPhotoAdapter(data : JSONObject, private val userToken: String): RecyclerView.Adapter<UpdatePhotoViewHolder>() {
@@ -29,7 +27,6 @@ class SuppPhotoAdapter(data : JSONObject, private val userToken: String): Recycl
     }
 
     override fun onBindViewHolder(holder: UpdatePhotoViewHolder, position: Int) {
-        //holder.getImageView().setImageResource(R.drawable.ic_launcher_background)
         try {
             val photoPath = photos.getString(position)
             val fullImageUrl = baseUrl + photoPath
@@ -69,14 +66,15 @@ class SuppPhotoAdapter(data : JSONObject, private val userToken: String): Recycl
             }
 
         } catch (e: Exception) {
+            Log.e("SuppPhotoAdapter", "Error loading photo at position $position", e)
             holder.getImageView().setImageResource(R.drawable.ic_launcher_background)
         }
     }
 }
 
 class UpdatePhotoViewHolder(itemView: android.view.View) : RecyclerView.ViewHolder(itemView) {
-    private val photoImageView: ImageView = itemView.findViewById(com.example.ghostapp.R.id.photo_image_view)
-    val suppPhotoBtn: ImageView = itemView.findViewById(com.example.ghostapp.R.id.supp_photo_image_view)
+    private val photoImageView: ImageView = itemView.findViewById(R.id.photo_image_view)
+    val suppPhotoBtn: ImageView = itemView.findViewById(R.id.supp_photo_image_view)
 
     fun getImageView(): ImageView = photoImageView
 }

@@ -4,14 +4,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.location.Geocoder
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.CheckedTextView
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -21,20 +19,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.Adapter.PhotoAdapter
-import com.example.ghostapp.Adapter.SuppPhotoAdapter
+import com.example.ghostapp.adapter.SuppPhotoAdapter
 import com.example.ghostapp.fragments.HeaderDetailFragment
 import com.example.ghostapp.services.MapServices
 import com.example.ghostapp.services.PhotoServices
 import com.example.ghostapp.services.ReportServices
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.coroutines.internal.OpDescriptor
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Locale
 import kotlin.concurrent.thread
 import kotlin.toString
 
+@Suppress("DEPRECATION")
 class UpdateReportActivity : AppCompatActivity() {
 
     private lateinit var updateReportActivityDate: TextView
@@ -201,14 +198,15 @@ class UpdateReportActivity : AppCompatActivity() {
 
     private fun formatISODate(isoDate: String): String {
         try {
-            val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.getDefault())
+            val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
             inputFormat.timeZone = java.util.TimeZone.getTimeZone("UTC")
 
-            val outputFormat = java.text.SimpleDateFormat("dd/MM/yyyy à HH:mm", java.util.Locale.FRANCE)
+            val outputFormat = java.text.SimpleDateFormat("dd/MM/yyyy à HH:mm", Locale.FRANCE)
 
             val date = inputFormat.parse(isoDate)
             return date?.let { outputFormat.format(it) } ?: "Date inconnue"
         } catch (e: Exception) {
+            Log.e("UpdateReportActivity", "Error parsing date: $isoDate", e)
             return isoDate
         }
     }
@@ -226,7 +224,7 @@ class UpdateReportActivity : AppCompatActivity() {
                 updateReportActivityCodePostal.setText(address.postalCode ?: "")
             }
         } catch (e: Exception) {
-            Toast.makeText(this, "Erreur lors de la récupération de l'adresse", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Erreur lors de la récupération de l'adresse $e", Toast.LENGTH_SHORT).show()
         }
     }
 

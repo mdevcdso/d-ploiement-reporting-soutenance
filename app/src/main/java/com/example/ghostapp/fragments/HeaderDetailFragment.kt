@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.ghostapp.MapActivity
-import com.example.ghostapp.ProfileActivity
 import com.example.ghostapp.R
 
 class HeaderDetailFragment : Fragment() {

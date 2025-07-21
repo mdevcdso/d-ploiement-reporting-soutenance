@@ -1,8 +1,6 @@
 package com.example.ghostapp
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
@@ -12,7 +10,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ghostapp.fragments.HeaderDefaultFragment
@@ -30,17 +27,12 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.Locale
 import kotlin.concurrent.thread
-import androidx.core.graphics.createBitmap
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val tag = "MapActivity"
 
-    lateinit var mapActivityUserProfile: ImageView
     lateinit var mapActivityAddReport: ImageView
-    lateinit var mapActivityMapButton: ImageView
-    lateinit var mapActivityReportButton: ImageView
-    lateinit var mapActivityBestiaryButton: ImageView
 
     var reportServices = ReportServices()
     var mapServices = MapServices()
@@ -88,7 +80,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                 mMap.uiSettings.isMyLocationButtonEnabled = true
             }
         } catch (e: SecurityException) {
-            Toast.makeText(this, "Permissions de localisation non accordées", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Permissions de localisation non accordées $e", Toast.LENGTH_SHORT).show()
         }
 
         val userToken = getSharedPreferences("save", MODE_PRIVATE).getString("token", null)

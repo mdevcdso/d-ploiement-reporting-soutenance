@@ -4,21 +4,17 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.Adapter.DataBestiaryAdapter
-import com.example.ghostapp.Adapter.DataReportAdapter
+import com.example.ghostapp.adapter.DataReportAdapter
 import com.example.ghostapp.fragments.HeaderDefaultFragment
-import com.example.ghostapp.services.BestiaryServices
 import com.example.ghostapp.services.ReportServices
 import org.json.JSONArray
 import org.json.JSONObject
-import kotlin.collections.get
 import kotlin.concurrent.thread
 
 class ReportActivity : AppCompatActivity() {

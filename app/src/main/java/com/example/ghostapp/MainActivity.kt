@@ -2,13 +2,11 @@ package com.example.ghostapp
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextClock
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -17,10 +15,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ghostapp.services.AuthServices
 import kotlin.concurrent.thread
-import okhttp3.FormBody
 import org.json.JSONObject
 import kotlin.apply
-import kotlin.collections.remove
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainActivityForgottenMdp: TextView

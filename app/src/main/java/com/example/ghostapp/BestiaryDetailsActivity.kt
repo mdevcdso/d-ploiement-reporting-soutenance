@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,13 +12,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ghostapp.Adapter.PhotoAdapter
+import com.example.ghostapp.adapter.PhotoAdapter
 import com.example.ghostapp.fragments.HeaderDetailFragment
 import com.example.ghostapp.services.BestiaryServices
 import com.example.ghostapp.services.PhotoServices
-import org.json.JSONArray
 import org.json.JSONObject
-import kotlin.compareTo
 import kotlin.concurrent.thread
 
 class BestiaryDetailsActivity : AppCompatActivity() {
@@ -92,7 +89,7 @@ class BestiaryDetailsActivity : AppCompatActivity() {
                         bestiaryDetailsActivityDescription.text = JSONObject(responseBody.toString()).getString("description")
                         bestiaryDetailsActivityCaracteristics.text = JSONObject(responseBody.toString()).getString("caracteristics")
 
-                        photoAdapter("bestiary", monsterId.toString(), JSONObject(userToken.toString()).getString("session"))
+                        photoAdapter(monsterId.toString(), JSONObject(userToken.toString()).getString("session"))
 
                     }
                 },
@@ -112,13 +109,12 @@ class BestiaryDetailsActivity : AppCompatActivity() {
         }
     }
     private fun photoAdapter(
-        category: String,
         id: String,
         userToken: String
     ) {
         thread {
             photoServices.getPhoto(
-                category,
+                "bestiary",
                 id,
                 userToken,
                 onSuccess = { responseBody: String? ->

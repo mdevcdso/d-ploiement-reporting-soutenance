@@ -1,7 +1,6 @@
 package com.example.ghostapp.services
 
 import android.util.Log
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Request
 
 class BestiaryServices {
@@ -14,7 +13,6 @@ class BestiaryServices {
         onSuccess: (String?) -> Unit,
         onError: (String) -> Unit
     ) {
-        val mediaType = "application/json; charset=utf-8".toMediaType()
         val request = Request.Builder()
             .url("$baseUrl/bestiary")
             .get()
@@ -43,7 +41,6 @@ class BestiaryServices {
         onSuccess: (String?) -> Unit,
         onError: (String) -> Unit
     ) {
-        val mediaType = "application/json; charset=utf-8".toMediaType()
         val request = Request.Builder()
             .url("$baseUrl/bestiary/$monsterId")
             .get()
