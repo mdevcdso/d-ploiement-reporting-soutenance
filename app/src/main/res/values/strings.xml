@@ -53,7 +53,7 @@
     <string name="delet_photo">supp photo</string>
     <string name="profile_activity_title">PROFILE</string>
     <string name="profile_activity_user_info">Informations du profil :</string>
-    <string name="profile_activity_logout_text">Deconexion</string>
+    <string name="profile_activity_logout_text">Déconexion</string>
     <string-array name="report_types">
         <item>Apparition</item>
         <item>Bête</item>
