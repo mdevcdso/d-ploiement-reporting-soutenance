@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileActivity"
+    android:orientation="vertical">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/header_container"
+        android:name="com.example.ghostapp.fragments.HeaderDetailFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="11"
+        android:fillViewport="true"
+        android:paddingBottom="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/colorBackground"
+            android:orientation="vertical"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_activity_user_info"
+                android:textSize="24sp"
+                android:padding="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/profile_activity_user_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="Nom"
+                    android:textSize="25sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/profile_activity_user_first_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    tools:text="Prenom"
+                    android:textSize="25sp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+            <TextView
+                android:id="@+id/profile_activity_user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Email"
+                android:textSize="20sp"
+                android:padding="10dp"/>
+            <TextView
+                android:id="@+id/profile_activity_user_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Téléphone"
+                android:textSize="20sp"
+                android:padding="10dp"/>
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:id="@+id/profile_activity_logout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:padding="10dp"
+        android:text="@string/profile_activity_logout_text"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
+        android:backgroundTint="@color/red"
+        android:textColor="@color/white"
+        />
+</LinearLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="custom_buttonGrey" format="color"/>
+    <attr name="custom_buttonBlue" format="color"/>
+    <attr name="custom_editTextGrey" format="color"/>
+    <attr name="custom_statusRed" format="color"/>
+    <attr name="custom_statusGreen" format="color"/>
+    <attr name="custom_statusOrange" format="color"/>
+    <attr name="custom_statusLightBlue" format="color"/>
+</resources>

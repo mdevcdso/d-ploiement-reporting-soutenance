@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".WelcomeScreenActivity"
+    android:orientation="vertical"
+    android:background="@color/main_blue"
+    android:padding="20dp">
+
+
+    <ImageView
+        android:id="@+id/welcome_screen_ghost_app_logo"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@mipmap/ghost_app_txt_logo"
+        android:contentDescription="@string/ghost_app_logo"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_screen_title"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_screen_instructions"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/button_grey"
+        app:strokeColor="@color/button_grey"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:paddingHorizontal="10dp">
+        <Button
+            android:id="@+id/welcome_screen_activity_subscribe_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_start_subscribe"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/button_grey"
+            android:layout_gravity="center"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"/>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/welcome_screen_activity_connexion_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_view_connexion"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_marginBottom="30dp"/>
+
+
+
+
+
+</LinearLayout>

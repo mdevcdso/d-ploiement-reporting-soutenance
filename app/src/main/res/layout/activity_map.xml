@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapActivity"
+    android:orientation="vertical"
+    android:background="@color/main_blue">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/header_container"
+        android:name="com.example.ghostapp.fragments.HeaderDefaultFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_weight="12">
+        
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent">
+            <fragment
+                android:id="@+id/map_activity_map_fragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <ImageView
+                android:id="@+id/map_activity_add_report"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:contentDescription="@string/add_report"
+                android:src="@drawable/vector_add_circle"
+                android:layout_margin="10dp"
+                android:layout_gravity="bottom|end"/>
+        </FrameLayout>
+        
+        <TextView
+            android:id="@+id/text_view_add_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_report"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"/>
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navigation_container"
+        android:name="com.example.ghostapp.fragments.NavigationFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+
+</LinearLayout>

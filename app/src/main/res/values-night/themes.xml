@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.GhostApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#262535</item>
+        <item name="colorPrimaryVariant">#262535</item>
+        <item name="android:textColorPrimaryInverse">#FFFFFF</item>
+
+        <item name="custom_buttonGrey">#6C6A7C</item>
+        <item name="custom_buttonBlue">#3C3965</item>
+        <item name="custom_editTextGrey">#D9D9D9</item>
+        <item name="custom_statusRed">#F44C4C</item>
+        <item name="custom_statusGreen">#7ED255</item>
+        <item name="custom_statusOrange">#F49633</item>
+        <item name="custom_statusLightBlue">#33C0F4</item>
+    </style>
+</resources>

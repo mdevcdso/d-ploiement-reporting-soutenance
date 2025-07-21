@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">GhostApp</string>
+    <string name="ghost_app_logo">ghost app logo</string>
+    <string name="ghost_app_back_arrow">ghost app back arrow</string>
+    <string name="text_view_connexion">Connexion</string>
+    <string name="text_view_identifiant">Identifiant</string>
+    <string name="text_view_mdp">Mot de passe</string>
+    <string name="edit_text_email">email</string>
+    <string name="edit_text_mdp">mot de passe</string>
+    <string name="button_connexion">Connexion</string>
+    <string name="button_mdp_oublie">Mot de passe oublié</string>
+    <string name="button_subscribe">Créer un compte</string>
+    <string name="welcome_screen_title">Bienvenue sur notre application</string>
+    <string name="welcome_screen_instructions">Appuyer sur commencer pour créer votre compte</string>
+    <string name="button_start_subscribe">Commencer</string>
+    <string name="subscribe_title">Saisir votre prénom</string>
+    <string name="text_view_info_input">Etape 1</string>
+    <string name="edit_text_info_input">prénom</string>
+    <string name="button_next_step">Suivant</string>
+    <string name="subscribe_activity_step_text">1/5</string>
+    <string name="map_activity_title">GHOST ALERT</string>
+    <string name="add_report">ENVOYER</string>
+    <string name="new_report">NOUVEAU SIGNALEMENT</string>
+    <string name="report_type">Type de phénomene</string>
+    <string name="report_address">address</string>
+    <string name="report_description">Description</string>
+    <string name="report_description_hint">description</string>
+    <string name="report_city">Ville</string>
+    <string name="report_code_postal">Code postal\n</string>
+    <string name="report_address_title">Localisation</string>
+    <string name="ghost_app_map_button">map activity icon</string>
+    <string name="ghost_app_bestiaire_button">bestiaire activity icon</string>
+    <string name="ghost_app_mdp_visibility_button">Voir le mdp</string>
+    <string name="bestiary_search_hint">Rechercher un phenoméne…</string>
+    <string name="bestiary_activity_title">BESTIAIRE</string>
+    <string name="data_bestiary_view_holder_button">VOIR</string>
+    <string name="bestiary_detail_activity_title">DETAIL</string>
+    <string name="bestiary_detail_description">Description</string>
+    <string name="bestiary_detail_caracteristiques">Caractéristiques</string>
+    <string name="ghost_app_report_button">report activity icon</string>
+    <string name="report_activity_title">MES SIGNALEMENT</string>
+    <string name="report_detail_activity_detail_activity_title">DETAIL</string>
+    <string name="report_date_title">Cree le :</string>
+    <string name="activity_report_detail_description">Description du signalement</string>
+    <string name="report_creation_date">Date de creation icon</string>
+    <string name="report_photos">Photo du signalement</string>
+    <string name="activity_report_detail_photos_title">Photos</string>
+    <string name="monster_img">image du monstre</string>
+    <string name="use_location">Utiliser ma localisation actuelle</string>
+    <string name="activity_report_detail_update">Modifier</string>
+    <string name="activity_report_detail_delete">Supprimer</string>
+    <string name="update_report">MODIFIER</string>
+    <string name="delet_photo">supp photo</string>
+    <string name="profile_activity_title">PROFILE</string>
+    <string name="profile_activity_user_info">Informations du profil :</string>
+    <string name="profile_activity_logout_text">Deconexion</string>
+    <string-array name="report_types">
+        <item>Apparition</item>
+        <item>Bête</item>
+        <item>Spectre</item>
+        <item>Ectoplasme</item>
+        <item>Revenant</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="update_report_activity_title">Modifier</string>
+    <string name="activity_report_add_report_btn">Ajouter un signalement</string>
+    <string name="reset_mdp_text_btn">Valider</string>
+    <string name="email_text_view">Votre email</string>
+    <string name="forgotten_password_title">Mot de passe oublié</string>
+    <string name="new_mdp_title">Saisir votre nouveau mot de passe</string>
+    <string name="new_mdp_verif_code_text_view">Code de vérification</string>
+    <string name="edit_text_code">code</string>
+    <string name="new_mdp_text_view">Nouveau mot de passe</string>
+    <string name="edit_text_new_mdp">mot de passe</string>
+    <string name="verify_code_title">Vérifiez votre boîte mail</string>
+    <string name="edit_text_vrif_new_mdp">Confirmer mot de passe</string>
+    <string name="edit_text_verif_new_mdp">Confirmer nouveau mot de passe</string>
+</resources>
