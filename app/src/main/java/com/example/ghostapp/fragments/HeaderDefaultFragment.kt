@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.example.ghostapp.MapActivity
 import com.example.ghostapp.ProfileActivity
 
+@Suppress("DEPRECATION")
 class HeaderDefaultFragment : Fragment() {
     private var headerTitle: String = ""
 
@@ -24,9 +25,14 @@ class HeaderDefaultFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        var currentActivity = requireActivity()
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<ImageView>(R.id.ghost_logo).setOnClickListener {
             startActivity(Intent(requireContext(), MapActivity::class.java))
+            if(currentActivity is MapActivity) {
+                requireActivity().overridePendingTransition(0, 0)
+                currentActivity.finish()
+            }
         }
 
         view.findViewById<TextView>(R.id.header_title).text = headerTitle

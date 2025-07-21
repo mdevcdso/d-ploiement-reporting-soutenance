@@ -24,9 +24,16 @@ class HeaderDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        var currentActivity = requireActivity()
+
+            super.onViewCreated(view, savedInstanceState)
         view.findViewById<ImageView>(R.id.ghost_logo).setOnClickListener {
             startActivity(Intent(requireContext(), MapActivity::class.java))
+            if( currentActivity is MapActivity) {
+                currentActivity.finish()
+            } else {
+                currentActivity.overridePendingTransition(0, 0)
+            }
         }
 
         view.findViewById<TextView>(R.id.header_title).text = headerTitle

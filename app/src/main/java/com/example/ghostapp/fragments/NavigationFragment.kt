@@ -25,13 +25,16 @@ class NavigationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val currentActivity = requireActivity()
         view.findViewById<ImageView>(R.id.map_activity_map_button).setOnClickListener {
             val intent = Intent(requireContext(), MapActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
             }
             startActivity(intent)
             requireActivity().overridePendingTransition(0, 0)
+            if( currentActivity is MapActivity) {
+                currentActivity.finish()
+            }
         }
 
         view.findViewById<ImageView>(R.id.map_activity_report_button).setOnClickListener {
@@ -40,6 +43,9 @@ class NavigationFragment : Fragment() {
             }
             startActivity(intent)
             requireActivity().overridePendingTransition(0, 0)
+            if( currentActivity is ReportActivity) {
+                currentActivity.finish()
+            }
         }
 
         view.findViewById<ImageView>(R.id.map_activity_bestiary_button).setOnClickListener {
@@ -48,6 +54,9 @@ class NavigationFragment : Fragment() {
             }
             startActivity(intent)
             requireActivity().overridePendingTransition(0, 0)
+            if( currentActivity is BestiaryActivity) {
+                currentActivity.finish()
+            }
         }
     }
 }
