@@ -39,13 +39,14 @@
             <EditText
                 android:id="@+id/bestiary_activity_search_edit_text"
                 android:layout_width="match_parent"
-                android:maxWidth="350dp"
                 android:layout_height="wrap_content"
+                android:autofillHints="search"
                 android:drawableStart="@drawable/white_search_vector_icon"
                 android:hint="@string/bestiary_search_hint"
                 android:inputType="text"
-                android:autofillHints="search"
-                android:padding="13dp"/>
+                android:maxWidth="350dp"
+                android:padding="13dp"
+                android:textColorHint="#616161" />
         </com.google.android.material.card.MaterialCardView>
 
 
