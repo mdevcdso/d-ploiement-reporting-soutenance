@@ -19,7 +19,6 @@ jobs:
 
     - name: Create secrets.properties
       run: |
-        echo "MAPS_API_KEY=AIzaSyBwNdLGYT2qLYkweYn8ZRDxeRmxYCg7KqQ" > secrets.properties
         echo "secrets.properties created"
         
     - name: Set up JDK
