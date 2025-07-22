@@ -121,7 +121,8 @@
                 android:backgroundTint="@color/button_grey"
                 android:layout_gravity="center"
                 android:paddingStart="50dp"
-                android:paddingEnd="50dp"/>
+                android:paddingEnd="50dp"
+                android:contentDescription="@string/connexion_button_accessibility"/>
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
