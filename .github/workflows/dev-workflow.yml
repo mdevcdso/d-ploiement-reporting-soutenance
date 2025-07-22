@@ -19,7 +19,7 @@ jobs:
 
     - name: Create secrets.properties
       run: |
-        echo "secrets.properties created"
+        echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > secrets.properties
         
     - name: Set up JDK
       uses: actions/setup-java@v4
