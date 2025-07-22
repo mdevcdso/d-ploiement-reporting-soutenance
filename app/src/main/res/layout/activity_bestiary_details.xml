@@ -14,7 +14,8 @@
         android:name="com.example.ghostapp.fragments.HeaderDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_header_detail"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,7 +62,7 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:padding="10dp"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:textSize="20sp"
                         tools:text="Monster level" />
 
