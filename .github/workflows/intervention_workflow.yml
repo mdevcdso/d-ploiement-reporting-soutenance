@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Cache Gradle packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: |
           ~/.gradle/caches
@@ -47,7 +47,7 @@ jobs:
       run: ./gradlew test --stacktrace --warning-mode all --continue || echo "Tests failed but continuing"
       
     - name: Upload APK to artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/app-debug.apk
