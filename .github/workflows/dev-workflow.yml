@@ -44,7 +44,7 @@ jobs:
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace --warning-mode all
       
-    - name: Run unit tests (optdional)
+    - name: Run unit tests
       run: ./gradlew test --stacktrace --warning-mode all --continue || echo "Tests failed but continuing"
         
     - name: Send email notification
