@@ -18,8 +18,7 @@ jobs:
 
     - name: Create secrets.properties
       run: |
-        echo "MAPS_API_KEY=AIzaSyBwNdLGYT2qLYkweYn8ZRDxeRmxYCg7KqQ" > secrets.properties
-        echo "secrets.properties created"
+        echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > secrets.properties
       
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -28,7 +27,7 @@ jobs:
         distribution: 'temurin'
         
     - name: Cache Gradle packages
-      uses: actions/cache@v4
+      uses: actions/cache@v3
       with:
         path: |
           ~/.gradle/caches
@@ -40,24 +39,34 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug --stacktrace --warning-mode all
+    - name: Build with Gradle
+      run: ./gradlew build
       
     - name: Run unit tests
-      run: ./gradlew test --stacktrace --warning-mode all --continue || echo "Tests failed but continuing"
+      run: ./gradlew test
       
-    - name: Upload APK to artifacts
-      uses: actions/upload-artifact@v4
+    - name: Build APK testing
+      run: ./gradlew assembleDebug
+      
+    - name: Upload APK to Testapp.io
+      run: |
+        echo "Uploading APK to Testapp.io..."
+        APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
+        
+        curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+          -F "file=@${APK_PATH}" \
+          -F "app_id=${{ secrets.ID_APP }}" \
+          "https://api.testapp.io/v1/upload"
+        
+        echo "APK uploaded successfully to Testapp.io"
+        echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
+        
+    - name: Upload APK artifacts
+      uses: actions/upload-artifact@v3
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/app-debug.apk
-        
-    - name: Simulate Testa.io integration
-      run: |
-        echo "Uploading APK to Testa.io for UI testing..."
-        echo "APK Size: $(ls -lh app/build/outputs/apk/debug/app-debug.apk | awk '{print $5}')"
-        echo "APK ready for automated UI testing on Testa.io"
-        # Ici vous intégrerez la vraie API Testa.io plus tard
         
     - name: Send email notification
       if: always()
@@ -67,14 +76,14 @@ jobs:
         server_port: 587
         username: ${{ secrets.SMTP_USERNAME }}
         password: ${{ secrets.SMTP_PASSWORD }}
-        subject: "INTEGRATION Build Status: ${{ job.status }}"
+        subject: "[INTEGRATION] Build Status: ${{ job.status }}"
         body: |
           Integration workflow completed.
           Status: ${{ job.status }}
           Repository: ${{ github.repository }}
           Commit: ${{ github.sha }}
           
-          APK built and ready for testing
-          UI tests prepared for Testa.io execution
+          APK built and uploaded to Testapp.io
+          UI tests ready for execution
         to: ${{ secrets.NOTIFICATION_EMAIL }}
         from: GitHub Actions <noreply@github.com>
