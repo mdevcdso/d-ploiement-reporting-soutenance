@@ -58,7 +58,7 @@ jobs:
         echo "✅ Secrets configured"
         echo "🚀 Uploading to Testapp.io..."
         
-        # Upload avec gestion d'erreur
+        # Upload avec gestion d'erreur test
         HTTP_CODE=$(curl -X POST \
           -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
           -F "file=@${APK_PATH}" \
