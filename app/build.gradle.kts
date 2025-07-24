@@ -12,9 +12,13 @@ android {
         applicationId = "com.example.ghostapp"
         minSdk = 28
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
+        
+        // Version automatique basée sur l'heure
+        versionCode = System.currentTimeMillis().div(1000).toInt()
+        // Ou version basée sur le nombre de commits
+        // versionCode = "git rev-list --count HEAD".execute().text.trim().toInt()
+        
+        versionName = "1.0.${versionCode}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

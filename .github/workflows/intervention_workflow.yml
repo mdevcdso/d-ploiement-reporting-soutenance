@@ -15,6 +15,10 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Create secrets.properties
+      run: |
+        echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > secrets.properties
       
     - name: Set up JDK 17
       uses: actions/setup-java@v4
@@ -44,18 +48,22 @@ jobs:
     - name: Build APK testing
       run: ./gradlew assembleDebug
       
+    - name: Upload APK TestApp.io
+      uses: testappio/github-action@v5
+      with:
+        api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
+        app_id: ${{secrets.TESTAPPIO_APP_ID}}
+        file: app/build/outputs/apk/debug/app-debug.apk
+        release_notes: ""
+        git_release_notes: true
+        include_git_commit_id: false
+        notify: true
+        
     - name: Upload APK artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: debug-apk
         path: app/build/outputs/apk/debug/app-debug.apk
-        
-    - name: Simulate Testa.io integration
-      run: |
-        echo "Uploading APK to Testa.io for UI testing..."
-        echo "APK Size: $(ls -lh app/build/outputs/apk/debug/app-debug.apk | awk '{print $5}')"
-        echo "APK ready for automated UI testing on Testa.io"
-        # Ici vous intégrerez la vraie API Testa.io plus tard
         
     - name: Send email notification
       if: always()
@@ -72,7 +80,7 @@ jobs:
           Repository: ${{ github.repository }}
           Commit: ${{ github.sha }}
           
-          APK built and ready for testing
-          UI tests prepared for Testa.io execution
+          APK built and uploaded to Testapp.io
+          UI tests ready for execution
         to: ${{ secrets.NOTIFICATION_EMAIL }}
         from: GitHub Actions <noreply@github.com>
