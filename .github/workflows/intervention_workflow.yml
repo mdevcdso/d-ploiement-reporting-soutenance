@@ -63,28 +63,39 @@ jobs:
         
         # Fonction de retry avec backoff
         upload_with_retry() {
-          local max_attempts=3
+          local max_attempts=4  # Augmenté à 4 tentatives
           local attempt=1
-          local delay=10
+          local delay=15        # Délai initial plus long
           
           while [ $attempt -le $max_attempts ]; do
             echo "🔄 Attempt $attempt/$max_attempts..."
             
+            # Ajouter User-Agent et Accept headers
             HTTP_CODE=$(curl -X POST \
               -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+              -H "User-Agent: GitHub-Actions/1.0" \
+              -H "Accept: application/json" \
               -F "file=@${APK_PATH}" \
               -F "app_id=${{ secrets.ID_APP }}" \
               "https://api.testapp.io/v1/upload" \
               -w "%{http_code}" \
               -s \
               -o response.json \
-              --max-time 300)
+              --max-time 600 \     # Augmenté à 10 minutes
+              --connect-timeout 30 \
+              --retry 0)           # Pas de retry automatique curl
             
             echo "📊 HTTP Response Code: $HTTP_CODE"
             
+            # Vérifier si la réponse contient du HTML (erreur serveur)
             if [ -f response.json ]; then
-              echo "📝 Response body:"
-              cat response.json
+              if grep -q "<html>" response.json 2>/dev/null; then
+                echo "📝 Server returned HTML error page (502/503 gateway error)"
+                echo "🔍 First line: $(head -1 response.json)"
+              else
+                echo "📝 Response body:"
+                cat response.json
+              fi
               echo ""
             fi
             
@@ -94,38 +105,71 @@ jobs:
                 echo "🔗 Access your tests at: https://portal.testapp.io/i/meYGGWaYDJ"
                 return 0
                 ;;
-              502|503|504)
-                echo "⚠️  Server error ($HTTP_CODE), retrying in ${delay}s..."
+              502|503|504|520|521|522|523|524)
+                echo "⚠️  Server/Gateway error ($HTTP_CODE) - Testapp.io infrastructure issue"
                 if [ $attempt -lt $max_attempts ]; then
+                  echo "⏳ Waiting ${delay}s before retry..."
                   sleep $delay
-                  delay=$((delay * 2))  # Exponential backoff
+                  delay=$((delay + 15))  # Incréments de 15s
                 fi
                 ;;
-              401|403)
-                echo "❌ Authentication error ($HTTP_CODE). Check your API_TOKEN and ID_APP"
+              401)
+                echo "❌ Authentication error: Invalid API_TOKEN"
+                echo "🔍 Check your API_TOKEN secret in GitHub"
                 return 1
+                ;;
+              403)
+                echo "❌ Forbidden: Check your ID_APP or API permissions"
+                return 1
+                ;;
+              413)
+                echo "❌ File too large (18M). Testapp.io may have size limits"
+                return 1
+                ;;
+              429)
+                echo "⚠️  Rate limited. Waiting longer..."
+                if [ $attempt -lt $max_attempts ]; then
+                  sleep 60  # Attendre 1 minute pour rate limit
+                fi
+                ;;
+              000)
+                echo "❌ Connection failed completely (timeout or network issue)"
+                if [ $attempt -lt $max_attempts ]; then
+                  sleep $delay
+                fi
                 ;;
               *)
                 echo "❌ Upload failed with HTTP code: $HTTP_CODE"
-                return 1
+                if [ $attempt -lt $max_attempts ]; then
+                  sleep $delay
+                fi
                 ;;
             esac
             
             attempt=$((attempt + 1))
           done
           
-          echo "❌ All upload attempts failed"
+          echo "❌ All $max_attempts upload attempts failed"
           return 1
         }
         
         # Exécuter l'upload avec retry
+        echo "🌐 Testing Testapp.io API availability..."
+        if curl -s --max-time 10 https://api.testapp.io/health >/dev/null 2>&1; then
+          echo "✅ Testapp.io API seems reachable"
+        else
+          echo "⚠️  Testapp.io API may be experiencing issues"
+        fi
+        
         if upload_with_retry; then
           echo "🎉 Upload completed successfully"
         else
           echo "💥 Upload failed after all retries"
-          echo "ℹ️  This might be a temporary Testapp.io server issue"
-          echo "ℹ️  Build will continue but manual upload may be needed"
-          # Ne pas faire échouer le build pour un problème temporaire de Testapp.io
+          echo "ℹ️  This appears to be a Testapp.io infrastructure issue (502 errors)"
+          echo "ℹ️  Your APK is still available in GitHub Actions artifacts"
+          echo "ℹ️  You can manually upload at: https://portal.testapp.io/i/meYGGWaYDJ"
+          # Ne pas faire échouer le build
+          echo "⏭️  Continuing workflow..."
         fi
         
     - name: Upload APK artifacts
