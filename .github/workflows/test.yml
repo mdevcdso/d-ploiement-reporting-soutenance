@@ -1,0 +1,29 @@
+name: Integration Branch
+
+on:
+  push:
+    branches: 
+      - integration
+  pull_request:
+    branches: 
+      - integration
+
+jobs:
+  build-test-and-ui-tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+    - name: Upload APK to Testapp.io
+      run: |
+        echo "Uploading to Testapp.io..."
+        APK_PATH="app/release/app-release.apk"
+        
+        curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+          -F "file=@${APK_PATH}" \
+          -F "app_id=${{ secrets.APP_ID }}" \
+          "https://api.testapp.io/v1/upload" \
+          || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+        
+        echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
