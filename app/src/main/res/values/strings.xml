@@ -78,7 +78,9 @@
     <string name="edit_text_vrif_new_mdp">Confirmer mot de passe</string>
     <string name="edit_text_verif_new_mdp">Confirmer nouveau mot de passe</string>
     <string name="report_type_spinner_description">monster type</string>
-    <string name="add_photos">ajouter des photos</string>
+    <string name="add_photos">Ajouter des photos</string>
     <string name="bestiary_monster_list">Liste des monstres</string>
     <string name="text_view_connexion_button">"Connexion "</string>
+    <string name="bestiary_list_monster_photo">Photo du monstre</string>
+    <string name="report_list">Liste des signalements</string>
 </resources>

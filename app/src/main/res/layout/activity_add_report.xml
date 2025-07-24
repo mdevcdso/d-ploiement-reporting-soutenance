@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddReportActivity"
     android:background="@color/main_blue"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".AddReportActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/header_container"
@@ -21,23 +21,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="13"
-        android:fillViewport="true"
-        android:background="?android:attr/colorBackground">
+        android:background="?android:attr/colorBackground"
+        android:fillViewport="true">
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:orientation="vertical"
             android:padding="10dp"
-            android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize">
-
+            android:layout_gravity="center"
+            >
             <TextView
                 android:id="@+id/add_report_monster_type_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:lines="1"
                 android:text="@string/report_type"
                 android:textSize="25sp"
-                android:padding="5dp"/>
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:maxLines="2" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -50,9 +55,10 @@
                     android:id="@+id/add_report_activity_report_type_spinner"
                     style="@style/SpinnerStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/report_type_spinner_description"
                     android:entries="@array/report_types"
-                    android:contentDescription="@string/report_type_spinner_description" />
+                    android:lines="1"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -60,10 +66,11 @@
                 android:id="@+id/add_report_address_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/report_address_title"
-                android:textSize="25sp"
+                android:layout_marginTop="10dp"
+                android:lines="1"
                 android:padding="5dp"
-                android:layout_marginTop="10dp"/>
+                android:text="@string/report_address_title"
+                android:textSize="25sp" />
 
 
             <com.google.android.material.card.MaterialCardView
@@ -76,13 +83,13 @@
 
                 <EditText
                     android:id="@+id/add_report_activity_address_edit_text"
-                    android:layout_width="488dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/report_address"
                     android:autofillHints="postalAddress"
-                    android:inputType="textPostalAddress"
+                    android:hint="@string/report_address"
                     android:importantForAutofill="yes"
-                    android:padding="13dp"/>
+                    android:inputType="textPostalAddress"
+                    android:padding="13dp" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -95,20 +102,20 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:strokeColor="@color/black"
-                    android:layout_weight="1">
+                    app:strokeColor="@color/black">
 
                     <EditText
                         android:id="@+id/add_report_activity_ville_edit_text"
-                        android:layout_width="448dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/report_city"
                         android:autofillHints="postalAddress"
-                        android:inputType="textPostalAddress"
+                        android:hint="@string/report_city"
                         android:importantForAutofill="yes"
-                        android:padding="13dp"/>
+                        android:inputType="textPostalAddress"
+                        android:padding="13dp" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -116,14 +123,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:strokeColor="@color/black"
-                    android:layout_weight="1">
+                    app:strokeColor="@color/black">
 
                     <EditText
                         android:id="@+id/add_report_activity_code_postal_edit_text"
-                        android:layout_width="448dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autofillHints="postalAddress"
                         android:hint="@string/report_code_postal"
@@ -135,26 +142,27 @@
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
-           <CheckedTextView
-               android:id="@+id/add_report_activity_use_location_check_box"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="@string/use_location"
-               android:textSize="20sp"
-               android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-               android:checked="false"
-               android:layout_marginEnd="8dp"
-               android:layout_marginStart="8dp"
-           />
+            <CheckedTextView
+                android:id="@+id/add_report_activity_use_location_check_box"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:checked="false"
+                android:text="@string/use_location"
+                android:textSize="20sp"
+                android:lines="1"/>
 
             <TextView
                 android:id="@+id/add_report_description_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/report_description"
-                android:textSize="25sp"
+                android:layout_marginTop="10dp"
                 android:padding="5dp"
-                android:layout_marginTop="10dp"/>
+                android:text="@string/report_description"
+                android:lines="1"
+                android:textSize="25sp" />
 
 
             <com.google.android.material.card.MaterialCardView
@@ -163,18 +171,21 @@
                 android:layout_margin="8dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/black">
+                app:strokeColor="@color/black"
+                android:ellipsize="end"
+                android:maxLines="2">
 
                 <EditText
                     android:id="@+id/add_report_activity_description_edit_text"
-                    android:layout_width="448dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:gravity="top|start"
-                    android:inputType="textMultiLine"
-                    android:hint="@string/report_description_hint"
                     android:autofillHints="postalAddress"
+                    android:gravity="top|start"
+                    android:hint="@string/report_description_hint"
                     android:importantForAutofill="yes"
-                    android:padding="10dp"/>
+                    android:inputType="textMultiLine"
+                    android:lines="1"
+                    android:padding="10dp" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -182,23 +193,23 @@
                 android:id="@+id/add_report_activity_photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/button_grey"
+                android:padding="10dp"
                 android:text="@string/add_photos"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/button_grey"
-                android:textSize="15sp"
-                android:padding="10dp"
-                android:layout_gravity="end" />
+                android:textSize="15sp"/>
 
             <Button
                 android:id="@+id/add_report_activity_submit_button"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/button_grey"
+                android:padding="10dp"
                 android:text="@string/add_report"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/button_grey"
-                android:textSize="15sp"
-                android:padding="10dp"
-                android:layout_gravity="center"/>
+                android:textSize="15sp" />
 
 
         </LinearLayout>

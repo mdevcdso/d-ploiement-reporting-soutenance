@@ -11,71 +11,68 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="10dp">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/vh_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="3">
+            tools:text="Name"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="3dp"/>
+
+        <TextView
+            android:id="@+id/vh_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Categorie : "
+            android:textSize="16sp"
+            android:padding="3dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/vh_level_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/button_grey"
+            android:layout_margin="3dp"
+            android:padding="3dp"
+            app:strokeWidth="0dp"
+            app:cardElevation="0dp">
 
             <TextView
-                android:id="@+id/vh_name"
+                android:id="@+id/vh_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Name"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:padding="3dp"/>
-
-            <TextView
-                android:id="@+id/vh_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Categorie : "
+                tools:text="En attente"
                 android:textSize="16sp"
-                android:padding="3dp"/>
+                android:textColor="@color/white"
+                android:padding="6dp"
+                android:layout_gravity="center"/>
 
-            <ImageView
-                android:id="@+id/vh_photo"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                />
+        </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/vh_level_card_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:padding="3dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="0dp">
-                <TextView
-                    android:id="@+id/vh_level"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="En attente"
-                    android:textSize="16sp"
-                    android:textColor="@color/white"
-                    android:padding="6dp"
-                    android:layout_gravity="center"/>
-
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/vh_photo"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:padding="8dp"
+            android:contentDescription="@string/bestiary_list_monster_photo"
+            />
 
         <Button
             android:id="@+id/vh_more_button"
-            android:layout_width="0dp"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:text="@string/data_bestiary_view_holder_button"
             android:textSize="15sp"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:backgroundTint="@color/button_blue"
             android:textColor="@color/white"
             />
+
     </LinearLayout>
 
 

@@ -13,7 +13,8 @@
         android:name="com.example.ghostapp.fragments.HeaderDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_header_detail"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,14 +24,15 @@
         android:paddingBottom="10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:background="?android:attr/colorBackground"
             android:orientation="vertical"
             android:paddingTop="10dp"
             android:paddingBottom="20dp"
             android:fitsSystemWindows="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/update_report_activity_date_text_view"
@@ -61,7 +63,8 @@
                     android:id="@+id/update_report_activity_report_type_spinner"
                     style="@style/SpinnerStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/report_type_spinner_description"
                     android:entries="@array/report_types" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -89,7 +92,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/report_address"
                     android:inputType="textPostalAddress"
-                    android:padding="10dp"/>
+                    android:autofillHints="postalAddress"
+                    android:padding="13dp"/>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -113,7 +117,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/report_city"
                         android:inputType="textPostalAddress"
-                        android:padding="10dp"/>
+                        android:autofillHints="postalAddress"
+                        android:padding="13dp"/>
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -132,7 +137,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/report_code_postal"
                         android:inputType="textPostalAddress"
-                        android:padding="10dp"/>
+                        android:autofillHints="postalAddress"
+                        android:padding="13dp"/>
 
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
@@ -174,6 +180,7 @@
                     android:gravity="top|start"
                     android:inputType="textMultiLine"
                     android:hint="@string/report_description_hint"
+                    android:autofillHints="text"
                     android:padding="10dp"
                     android:background="@null" />
 
@@ -196,14 +203,15 @@
 
             <Button
                 android:id="@+id/update_report_activity_submit_button"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:text="@string/update_report"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/button_grey"
                 android:textSize="20sp"
                 android:layout_margin="8dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
     </ScrollView>

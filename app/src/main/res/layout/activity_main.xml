@@ -29,39 +29,43 @@
         android:layout_weight="1"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="375dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="5"
         android:orientation="vertical"
         android:padding="10dp"
-        android:layout_weight="5">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/text_view_identifiant"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_gravity="start"/>
-        <EditText
-            android:id="@+id/main_activity_email_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="emailAddress"
-            android:inputType="textEmailAddress"
-            android:hint="@string/edit_text_email"
-            android:textColor="@color/black"
-            android:textColorHint="@color/button_grey"
-            android:background="@color/white"
-            android:textSize="25sp"
-            android:padding="15dp"
-            android:layout_marginBottom="20dp"/>
+        tools:ignore="TextSizeCheck">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="@string/text_view_identifiant"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/main_activity_email_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:autofillHints="emailAddress"
+            android:background="@color/white"
+            android:hint="@string/edit_text_email"
+            android:inputType="textEmailAddress"
+            android:padding="15dp"
+            android:textColor="@color/black"
+            android:textColorHint="@color/button_grey"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:text="@string/text_view_mdp"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_gravity="start"/>
+            android:textSize="20sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -71,24 +75,24 @@
                 android:id="@+id/main_activity_mdp_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
                 android:autofillHints="password"
-                android:inputType="textPassword"
+                android:background="@color/white"
                 android:hint="@string/edit_text_mdp"
+                android:inputType="textPassword"
+                android:padding="15dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/button_grey"
-                android:background="@color/white"
-                android:textSize="25sp"
-                android:padding="15dp"
-                android:layout_marginBottom="5dp"/>
+                android:textSize="25sp" />
+
             <ImageView
                 android:id="@+id/main_activity_mdp_visibility_button"
-                android:contentDescription="@string/ghost_app_mdp_visibility_button"
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:src="@drawable/line_icon"
                 android:layout_gravity="end"
-                />
+                android:layout_margin="10dp"
+                android:contentDescription="@string/ghost_app_mdp_visibility_button"
+                android:src="@drawable/line_icon" />
 
         </FrameLayout>
 
@@ -96,46 +100,47 @@
             android:id="@+id/main_activity_forgot_password_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="20sp"
+            android:autoLink="all"
+            android:linksClickable="true"
             android:text="@string/button_mdp_oublie"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_marginBottom="20sp"
-            android:layout_gravity="end"
-            android:autoLink="all"
-            android:linksClickable="true"/>
+            android:textSize="20sp" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
+            android:layout_gravity="center"
             app:cardBackgroundColor="@color/button_grey"
-            app:strokeColor="@color/button_grey"
-            android:layout_gravity="center">
+            app:cardCornerRadius="20dp"
+            app:strokeColor="@color/button_grey">
+
             <Button
                 android:id="@+id/main_activity_connexion_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/text_view_connexion_button"
-                android:textSize="25sp"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/button_grey"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/button_grey"
+                android:contentDescription="@string/connexion_button_accessibility"
                 android:paddingStart="50dp"
                 android:paddingEnd="50dp"
-                android:contentDescription="@string/connexion_button_accessibility"/>
+                android:text="@string/text_view_connexion_button"
+                android:textColor="@color/white"
+                android:textSize="25sp" />
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/main_activity_inscription_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:autoLink="all"
+            android:linksClickable="true"
             android:text="@string/button_subscribe"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
-            android:autoLink="all"
-            android:linksClickable="true"/>
+            android:textSize="20sp" />
 
     </LinearLayout>
 
