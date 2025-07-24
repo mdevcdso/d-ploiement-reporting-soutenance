@@ -54,9 +54,9 @@ jobs:
         APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
         
         curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+          -H "Authorization: Bearer ${{ secrets.aa }}" \
           -F "file=@${APK_PATH}" \
-          -F "yy" \
+          -F "app_id=${{ secrets.zz }}" \
           "https://api.testapp.io/v1/upload" \
           || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
         
