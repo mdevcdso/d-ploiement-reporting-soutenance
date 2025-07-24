@@ -53,7 +53,11 @@ class MainActivity : AppCompatActivity() {
                     JSONObject(userToken).getString("session"),
                     onSuccess = { responseBody: String? ->
                         runOnUiThread {
-                            val intent = Intent(this, MapActivity::class.java)
+                            val intent = Intent(this, MapActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                        Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
                             startActivity(intent)
                             finish()
                         }

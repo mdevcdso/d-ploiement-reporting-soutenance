@@ -22,6 +22,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.ktx.Firebase
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -39,7 +43,15 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private var userLatLng: LatLng = LatLng(46.603354, 1.888334)
 
+    private fun setUpFirebaseAnalytics() {
+        val firebaseAnalytics = Firebase.analytics
+        firebaseAnalytics.logEvent("home_fragment_view") {
+            param(FirebaseAnalytics.Param.ITEM_ID, "home_fragment")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        setUpFirebaseAnalytics()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_map)
@@ -58,6 +70,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         mapActivityAddReport = findViewById(R.id.map_activity_add_report)
         mapActivityAddReport.setOnClickListener {
             //throw RuntimeException("Test Crash")
+            val firebaseAnalytics = Firebase.analytics
+            firebaseAnalytics.logEvent("add_report_button_click") {
+                param(FirebaseAnalytics.Param.ITEM_ID, "report_button")
+            }
             val intent = Intent(this, AddReportActivity::class.java)
             startActivity(intent)
         }
