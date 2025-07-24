@@ -34,61 +34,72 @@ jobs:
           find . -name "*.apk" -type f 2>/dev/null || echo "No APK files found in repository"
         fi
         
-    - name: Test Testapp.io Upload
-      run: |
-        echo "🧪 Testing Testapp.io upload with existing APK..."
+    # - name: Test Testapp.io Upload
+    #   run: |
+    #     echo "🧪 Testing Testapp.io upload with existing APK..."
         
-        APK_PATH="app/release/app-release.apk"
+    #     APK_PATH="app/release/app-release.apk"
         
-        if [ ! -f "$APK_PATH" ]; then
-          echo "❌ APK not found at $APK_PATH"
-          echo "Please commit your APK file to the repository first"
-          exit 1
-        fi
+    #     if [ ! -f "$APK_PATH" ]; then
+    #       echo "❌ APK not found at $APK_PATH"
+    #       echo "Please commit your APK file to the repository first"
+    #       exit 1
+    #     fi
         
-        echo "✅ Using APK: $APK_PATH"
-        echo "📊 APK Size: $(ls -lh $APK_PATH | awk '{print $5}')"
+    #     echo "✅ Using APK: $APK_PATH"
+    #     echo "📊 APK Size: $(ls -lh $APK_PATH | awk '{print $5}')"
         
-        # Test secrets
-        if [ -z "${{ secrets.API_TOKEN }}" ] || [ -z "${{ secrets.APP_ID }}" ]; then
-          echo "❌ Missing API secrets"
-          exit 1
-        fi
+    #     # Test secrets
+    #     if [ -z "${{ secrets.API_TOKEN }}" ] || [ -z "${{ secrets.APP_ID }}" ]; then
+    #       echo "❌ Missing API secrets"
+    #       exit 1
+    #     fi
         
-        echo "✅ Secrets configured"
-        echo "🚀 Uploading to Testapp.io..."
+    #     echo "✅ Secrets configured"
+    #     echo "🚀 Uploading to Testapp.io..."
         
-        # Upload avec gestion d'erreur test
-        HTTP_CODE=$(curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
-          -F "file=@${APK_PATH}" \
-          -F "app_id=${{ secrets.APP_ID }}" \
-          "https://api.testapp.io/v1/upload" \
-          --max-time 120 \
-          --write-out "%{http_code}" \
-          --silent \
-          --output response.txt)
+    #     # Upload avec gestion d'erreur test
+    #     HTTP_CODE=$(curl -X POST \
+    #       -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+    #       -F "file=@${APK_PATH}" \
+    #       -F "app_id=${{ secrets.APP_ID }}" \
+    #       "https://api.testapp.io/v1/upload" \
+    #       --max-time 120 \
+    #       --write-out "%{http_code}" \
+    #       --silent \
+    #       --output response.txt)
         
-        echo "📊 HTTP Response Code: $HTTP_CODE"
+    #     echo "📊 HTTP Response Code: $HTTP_CODE"
         
-        if [ -f response.txt ]; then
-          echo "📝 Response:"
-          head -10 response.txt
-        fi
+    #     if [ -f response.txt ]; then
+    #       echo "📝 Response:"
+    #       head -10 response.txt
+    #     fi
         
-        case "$HTTP_CODE" in
-          "200"|"201")
-            echo "✅ Upload successful!"
-            ;;
-          "502"|"503"|"504")
-            echo "⚠️  Server error - Testapp.io may be down"
-            ;;
-          "401"|"403")
-            echo "❌ Authentication failed"
-            ;;
-          *)
-            echo "❌ Upload failed with code: $HTTP_CODE"
-            ;;
-        esac
+    #     case "$HTTP_CODE" in
+    #       "200"|"201")
+    #         echo "✅ Upload successful!"
+    #         ;;
+    #       "502"|"503"|"504")
+    #         echo "⚠️  Server error - Testapp.io may be down"
+    #         ;;
+    #       "401"|"403")
+    #         echo "❌ Authentication failed"
+    #         ;;
+    #       *)
+    #         echo "❌ Upload failed with code: $HTTP_CODE"
+    #         ;;
+    #     esac
         
-        echo "🔗 Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+    #     echo "🔗 Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+
+    - name: Upload artifact to TestApp.io
+      uses: testappio/github-action@v5
+      with:
+        api_token: ${{secrets.TESTAPPIO_API_TOKEN}}
+        app_id: ${{secrets.TESTAPPIO_APP_ID}}
+        file: app/release/app-release.apk
+        release_notes: ""
+        git_release_notes: true
+        include_git_commit_id: true
+        notify: true
