@@ -1,29 +1,94 @@
-name: Integration Branch
+name: Test Testapp.io Upload
 
 on:
+  workflow_dispatch:  # Déclenchement manuel seulement
   push:
-    branches: 
-      - integration
-  pull_request:
     branches: 
       - integration
 
 jobs:
-  build-test-and-ui-tests:
+  test-testapp-upload:
     runs-on: ubuntu-latest
     
     steps:
-      
-    - name: Upload APK to Testapp.io
+    - name: Checkout code
+      uses: actions/checkout@v4
+        
+    - name: Verify APK exists in repository
       run: |
-        echo "Uploading to Testapp.io..."
+        echo "📦 Checking for existing APK in repository..."
+        
+        # Chercher l'APK dans le projet
+        find . -name "*.apk" -type f
+        
+        # Vérifier le chemin spécifique
+        if [ -f "app/release/app-release.apk" ]; then
+          echo "✅ APK found at: app/release/app-release.apk"
+          echo "📊 APK Size: $(ls -lh app/release/app-release.apk | awk '{print $5}')"
+        else
+          echo "❌ APK not found at app/release/app-release.apk"
+          echo "Available files in app/release/:"
+          ls -la app/release/ 2>/dev/null || echo "Directory app/release/ not found"
+          
+          echo "Looking for APK files in entire project:"
+          find . -name "*.apk" -type f 2>/dev/null || echo "No APK files found in repository"
+        fi
+        
+    - name: Test Testapp.io Upload
+      run: |
+        echo "🧪 Testing Testapp.io upload with existing APK..."
+        
         APK_PATH="app/release/app-release.apk"
         
-        curl -X POST \
+        if [ ! -f "$APK_PATH" ]; then
+          echo "❌ APK not found at $APK_PATH"
+          echo "Please commit your APK file to the repository first"
+          exit 1
+        fi
+        
+        echo "✅ Using APK: $APK_PATH"
+        echo "📊 APK Size: $(ls -lh $APK_PATH | awk '{print $5}')"
+        
+        # Test secrets
+        if [ -z "${{ secrets.API_TOKEN }}" ] || [ -z "${{ secrets.APP_ID }}" ]; then
+          echo "❌ Missing API secrets"
+          exit 1
+        fi
+        
+        echo "✅ Secrets configured"
+        echo "🚀 Uploading to Testapp.io..."
+        
+        # Upload avec gestion d'erreur
+        HTTP_CODE=$(curl -X POST \
           -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
           -F "file=@${APK_PATH}" \
           -F "app_id=${{ secrets.APP_ID }}" \
           "https://api.testapp.io/v1/upload" \
-          || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+          --max-time 120 \
+          --write-out "%{http_code}" \
+          --silent \
+          --output response.txt)
         
-        echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
+        echo "📊 HTTP Response Code: $HTTP_CODE"
+        
+        if [ -f response.txt ]; then
+          echo "📝 Response:"
+          head -10 response.txt
+        fi
+        
+        case "$HTTP_CODE" in
+          "200"|"201")
+            echo "✅ Upload successful!"
+            ;;
+          "502"|"503"|"504")
+            echo "⚠️  Server error - Testapp.io may be down"
+            ;;
+          "401"|"403")
+            echo "❌ Authentication failed"
+            ;;
+          *)
+            echo "❌ Upload failed with code: $HTTP_CODE"
+            ;;
+        esac
+        
+        echo "🔗 Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
