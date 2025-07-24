@@ -1,89 +1,89 @@
-name: Integration Branch
+# name: Integration Branch
 
-on:
-  push:
-    branches: 
-      - integration
-  pull_request:
-    branches: 
-      - integration
+# on:
+#   push:
+#     branches: 
+#       - integration
+#   pull_request:
+#     branches: 
+#       - integration
 
-jobs:
-  build-test-and-ui-tests:
-    runs-on: ubuntu-latest
+# jobs:
+#   build-test-and-ui-tests:
+#     runs-on: ubuntu-latest
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
 
-    - name: Create secrets.properties
-      run: |
-        echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > secrets.properties
+#     - name: Create secrets.properties
+#       run: |
+#         echo "MAPS_API_KEY=${{ secrets.MAPS_API_KEY }}" > secrets.properties
       
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+#     - name: Set up JDK 17
+#       uses: actions/setup-java@v4
+#       with:
+#         java-version: '17'
+#         distribution: 'temurin'
         
-    - name: Cache Gradle packages
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+#     - name: Cache Gradle packages
+#       uses: actions/cache@v3
+#       with:
+#         path: |
+#           ~/.gradle/caches
+#           ~/.gradle/wrapper
+#         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+#         restore-keys: |
+#           ${{ runner.os }}-gradle-
           
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+#     - name: Grant execute permission for gradlew
+#       run: chmod +x gradlew
       
-    - name: Build with Gradle
-      run: ./gradlew build
+#     - name: Build with Gradle
+#       run: ./gradlew build
       
-    - name: Run unit tests
-      run: ./gradlew test
+#     - name: Run unit tests
+#       run: ./gradlew test
       
-    - name: Build APK testing
-      run: ./gradlew assembleDebug
+#     - name: Build APK testing
+#       run: ./gradlew assembleDebug
       
-    - name: Upload APK to Testapp.io
-      run: |
-        echo "Uploading to Testapp.io..."
-        APK_PATH="app/release/app-release.apk"
+#     - name: Upload APK to Testapp.io
+#       run: |
+#         echo "Uploading to Testapp.io..."
+#         APK_PATH="app/release/app-release.apk"
         
-        curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
-          -F "file=@${APK_PATH}" \
-          -F "app_id=${{ secrets.APP_ID }}" \
-          "https://api.testapp.io/v1/upload" \
-          || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+#         curl -X POST \
+#           -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+#           -F "file=@${APK_PATH}" \
+#           -F "app_id=${{ secrets.APP_ID }}" \
+#           "https://api.testapp.io/v1/upload" \
+#           || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
         
-        echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
+#         echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
         
-    - name: Upload APK artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: debug-apk
-        path: app/build/outputs/apk/debug/app-debug.apk
+#     - name: Upload APK artifacts
+#       uses: actions/upload-artifact@v4
+#       with:
+#         name: debug-apk
+#         path: app/build/outputs/apk/debug/app-debug.apk
         
-    - name: Send email notification
-      if: always()
-      uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: smtp.gmail.com
-        server_port: 587
-        username: ${{ secrets.SMTP_USERNAME }}
-        password: ${{ secrets.SMTP_PASSWORD }}
-        subject: "[INTEGRATION] Build Status: ${{ job.status }}"
-        body: |
-          Integration workflow completed.
-          Status: ${{ job.status }}
-          Repository: ${{ github.repository }}
-          Commit: ${{ github.sha }}
+#     - name: Send email notification
+#       if: always()
+#       uses: dawidd6/action-send-mail@v3
+#       with:
+#         server_address: smtp.gmail.com
+#         server_port: 587
+#         username: ${{ secrets.SMTP_USERNAME }}
+#         password: ${{ secrets.SMTP_PASSWORD }}
+#         subject: "[INTEGRATION] Build Status: ${{ job.status }}"
+#         body: |
+#           Integration workflow completed.
+#           Status: ${{ job.status }}
+#           Repository: ${{ github.repository }}
+#           Commit: ${{ github.sha }}
           
-          APK built and uploaded to Testapp.io
-          UI tests ready for execution
-        to: ${{ secrets.NOTIFICATION_EMAIL }}
-        from: GitHub Actions <noreply@github.com>
+#           APK built and uploaded to Testapp.io
+#           UI tests ready for execution
+#         to: ${{ secrets.NOTIFICATION_EMAIL }}
+#         from: GitHub Actions <noreply@github.com>
