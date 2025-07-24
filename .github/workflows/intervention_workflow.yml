@@ -61,24 +61,48 @@ jobs:
         
         echo "📱 APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
         
-        # Fonction de retry avec backoff
+        # Tester différentes URLs API
+        echo "🔍 Testing API endpoints..."
+        
+        # Test 1: URL actuelle
+        echo "Testing: https://api.testapp.io/v1/upload"
+        curl -I "https://api.testapp.io/v1/upload" 2>/dev/null | head -1 || echo "Failed"
+        
+        # Test 2: URL alternative
+        echo "Testing: https://testapp.io/api/v1/upload"
+        curl -I "https://testapp.io/api/v1/upload" 2>/dev/null | head -1 || echo "Failed"
+        
+        # Test 3: URL alternative
+        echo "Testing: https://api.testapp.io/upload"
+        curl -I "https://api.testapp.io/upload" 2>/dev/null | head -1 || echo "Failed"
+        
+        # Test 4: Base API
+        echo "Testing: https://api.testapp.io/"
+        curl -s "https://api.testapp.io/" | head -3 || echo "Failed"
+        
+        # Fonction de retry avec plusieurs URLs
         upload_with_retry() {
-          local max_attempts=3
+          local max_attempts=2
           local attempt=1
-          local delay=30
           
-          while [ $attempt -le $max_attempts ]; do
-            echo "🔄 Attempt $attempt/$max_attempts..."
+          # URLs à tester
+          local urls=(
+            "https://api.testapp.io/v1/upload"
+            "https://testapp.io/api/v1/upload"
+            "https://api.testapp.io/upload"
+          )
+          
+          for url in "${urls[@]}"; do
+            echo "🔄 Trying URL: $url"
             
-            # Commande curl corrigée (une seule ligne)
             HTTP_CODE=$(curl -X POST \
               -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
               -H "User-Agent: GitHub-Actions/1.0" \
               -H "Accept: application/json" \
               -F "file=@${APK_PATH}" \
               -F "app_id=${{ secrets.APP_ID }}" \
-              "https://api.testapp.io/v1/upload" \
-              --max-time 300 \
+              "$url" \
+              --max-time 120 \
               --connect-timeout 30 \
               --write-out "%{http_code}" \
               --silent \
@@ -86,87 +110,73 @@ jobs:
             
             echo "📊 HTTP Response Code: $HTTP_CODE"
             
-            # Vérifier le contenu de la réponse
+            # Afficher la réponse
             if [ -f response.json ]; then
-              echo "📝 Response content:"
-              if grep -q "<html>" response.json 2>/dev/null; then
-                echo "⚠️  Received HTML error page instead of JSON"
-                head -3 response.json
-              else
-                echo "✅ JSON Response:"
-                cat response.json
-              fi
+              echo "📝 Response (first 5 lines):"
+              head -5 response.json
               echo ""
             fi
             
-            # Gestion des codes de retour
             case "$HTTP_CODE" in
               "200"|"201")
-                echo "✅ APK uploaded successfully to Testapp.io!"
-                echo "🔗 Access your tests at: https://portal.testapp.io/i/meYGGWaYDJ"
+                echo "✅ APK uploaded successfully!"
+                echo "🔗 Access: https://portal.testapp.io/i/meYGGWaYDJ"
                 return 0
                 ;;
-              "502"|"503"|"504"|"520"|"521"|"522"|"523"|"524")
-                echo "⚠️  Server error ($HTTP_CODE) - Testapp.io may be down"
+              "404")
+                echo "❌ URL not found - trying next URL..."
+                continue
                 ;;
-              "401")
-                echo "❌ Authentication failed - Check API_TOKEN"
+              "401"|"403")
+                echo "❌ Authentication/Authorization failed"
+                echo "🔍 Check your API_TOKEN and APP_ID secrets"
                 return 1
                 ;;
-              "403")
-                echo "❌ Access forbidden - Check APP_ID"
-                return 1
-                ;;
-              "413")
-                echo "❌ File too large (consider reducing APK size)"
-                return 1
-                ;;
-              "000"|"")
-                echo "❌ Connection failed or timeout"
+              "502"|"503"|"504")
+                echo "⚠️  Server error - trying next URL..."
+                continue
                 ;;
               *)
-                echo "❌ Unexpected HTTP code: $HTTP_CODE"
+                echo "⚠️  Unexpected code $HTTP_CODE - trying next URL..."
+                continue
                 ;;
             esac
-            
-            if [ $attempt -lt $max_attempts ]; then
-              echo "⏳ Waiting ${delay}s before retry..."
-              sleep $delay
-              delay=$((delay + 30))
-            fi
-            
-            attempt=$((attempt + 1))
           done
           
           return 1
         }
         
-        # Test de connectivité simple
-        echo "🌐 Checking Testapp.io connectivity..."
-        if ping -c 1 api.testapp.io >/dev/null 2>&1; then
-          echo "✅ Can reach api.testapp.io"
+        # Debug des secrets (sans les révéler)
+        echo "🔍 Checking secrets..."
+        if [ ${#{{ secrets.API_TOKEN }}} -gt 10 ]; then
+          echo "✅ API_TOKEN appears valid (length: ${#{{ secrets.API_TOKEN }}})"
         else
-          echo "⚠️  Cannot ping api.testapp.io"
+          echo "⚠️  API_TOKEN seems too short"
+        fi
+        
+        if [ ${#{{ secrets.APP_ID }}} -gt 5 ]; then
+          echo "✅ APP_ID appears valid (length: ${#{{ secrets.APP_ID }}})"
+        else
+          echo "⚠️  APP_ID seems too short"
         fi
         
         # Tentative d'upload
         if upload_with_retry; then
           echo "🎉 Upload successful!"
         else
-          echo "💥 Upload failed - Testapp.io seems to have persistent issues"
-          echo "📋 Troubleshooting steps:"
-          echo "   1. Check Testapp.io status page"
-          echo "   2. Verify API_TOKEN and APP_ID secrets"
-          echo "   3. Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
-          echo "   4. Download APK from GitHub Actions artifacts"
-          
-          # Pour le debugging - vérifier les secrets (sans les afficher)
-          if [ -z "${{ secrets.API_TOKEN }}" ]; then
-            echo "⚠️  API_TOKEN appears to be empty"
-          fi
-          if [ -z "${{ secrets.APP_ID }}" ]; then
-            echo "⚠️  APP_ID appears to be empty"
-          fi
+          echo "💥 All upload attempts failed"
+          echo "📋 Possible issues:"
+          echo "   1. Wrong API endpoint URL"
+          echo "   2. Invalid API_TOKEN or APP_ID"
+          echo "   3. Testapp.io service issues"
+          echo "   4. File format not accepted"
+          echo ""
+          echo "📞 Contact Testapp.io support with:"
+          echo "   - Your APP_ID: ${{ secrets.APP_ID }}"
+          echo "   - Error: 404 then 502"
+          echo "   - File size: 18M"
+          echo ""
+          echo "🔗 Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
         fi
         
     - name: Upload APK artifacts
