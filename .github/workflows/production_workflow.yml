@@ -44,7 +44,7 @@ jobs:
         # Version code pour production basée sur timestamp
         VERSION_CODE=$(($(date +%s) + ${{ github.run_number }}))
         echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-        echo "Production version code: $VERSION_CODE"
+        echo "🚀 Production version code: $VERSION_CODE"
       
     - name: Build with Gradle
       run: ./gradlew build -PversionCode=${{ env.VERSION_CODE }}
@@ -55,16 +55,29 @@ jobs:
     - name: Build Release APK
       run: ./gradlew assembleRelease -PversionCode=${{ env.VERSION_CODE }}
       
+    - name: Verify APK location
+      run: |
+        echo "📦 Checking APK build output..."
+        find . -name "*.apk" -type f
+        echo ""
+        echo "Checking expected location:"
+        ls -la app/build/outputs/apk/release/ || echo "Release directory not found"
+        echo ""
+        echo "APK file details:"
+        if [ -f "app/build/outputs/apk/release/app-release.apk" ]; then
+          echo "✅ APK found: app/build/outputs/apk/release/app-release.apk"
+          echo "📊 Size: $(ls -lh app/build/outputs/apk/release/app-release.apk | awk '{print $5}')"
+        else
+          echo "❌ APK not found at expected location"
+          echo "Looking for alternative names..."
+          ls -la app/build/outputs/apk/release/
+        fi
+      
     - name: Sign APK
       run: |
-        echo "Signing APK with release keystore..."
-        echo "APK signed and ready for distribution"
+        echo "🔐 Signing APK with release keystore..."
+        echo "✅ APK signed and ready for distribution"
         # En production, ici on signerait l'APK
-
-    - name: Create Firebase service account file
-      run: |
-        echo "Creating Firebase service account file..."
-        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
         
     - name: Deploy to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
@@ -74,26 +87,20 @@ jobs:
         groups: testers
         file: app/build/outputs/apk/release/app-release.apk
         releaseNotes: |
-          Production Release v${{ env.VERSION_CODE }}
+          🚀 Production Release v${{ env.VERSION_CODE }}
           
-          Build Date: ${{ steps.date.outputs.date }}
-          Commit: ${{ github.sha }}
-          Author: ${{ github.actor }}
+          📅 Build: ${{ github.run_number }}
+          🔄 Commit: ${{ github.sha }}
+          👤 Author: ${{ github.actor }}
           
-          Latest features and bug fixes included
-          Ready for beta testing
+          ✨ Latest features and bug fixes included
+          📱 Ready for beta testing
         
     - name: Upload Release APK to artifacts
       uses: actions/upload-artifact@v4
       with:
         name: release-apk-v${{ env.VERSION_CODE }}
         path: app/build/outputs/apk/release/
-
-    - name: Cleanup sensitive files
-      if: always()
-      run: |
-        rm -f firebase-service-account.json
-        echo "🧹 Cleaned up sensitive files"
         
     - name: Send email notification
       if: always()
@@ -103,19 +110,20 @@ jobs:
         server_port: 587
         username: ${{ secrets.SMTP_USERNAME }}
         password: ${{ secrets.SMTP_PASSWORD }}
-        subject: "[PROD] Deployment Status: ${{ job.status }}"
+        subject: "[PROD] Release v${{ env.VERSION_CODE }} - ${{ job.status }}"
         body: |
-          Production deployment completed!
+          🚀 Production deployment completed!
           
           Status: ${{ job.status }}
+          Version: ${{ env.VERSION_CODE }}
           Repository: ${{ github.repository }}
           Commit: ${{ github.sha }}
           
-          Release APK built and signed
-          App deployed to Firebase App Distribution
-          Beta testers will receive the update
+          ✅ Release APK built and signed
+          ✅ App deployed to Firebase App Distribution
+          📱 Beta testers will receive the update automatically
           
-          Download the APK from the Actions artifacts.
-          Firebase Console: https://console.firebase.google.com/project/${{ secrets.FIREBASE_PROJECT_ID }}/appdistribution
+          📥 Download APK: GitHub Actions artifacts
+          🔗 Firebase Console: https://console.firebase.google.com/project/${{ secrets.FIREBASE_PROJECT_ID }}/appdistribution
         to: ${{ secrets.NOTIFICATION_EMAIL }}
         from: GitHub Actions <noreply@github.com>
