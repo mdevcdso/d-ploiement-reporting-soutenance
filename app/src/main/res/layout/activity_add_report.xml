@@ -179,13 +179,16 @@
                     android:id="@+id/add_report_activity_description_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:autofillHints="postalAddress"
                     android:gravity="top|start"
                     android:hint="@string/report_description_hint"
-                    android:importantForAutofill="yes"
-                    android:inputType="textMultiLine"
-                    android:lines="1"
-                    android:padding="10dp" />
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3"
+                    android:scrollbars="vertical"
+                    android:fadeScrollbars="false"
+                    android:padding="12dp"
+                    android:textSize="16sp"
+                    android:importantForAutofill="no"
+                    android:autofillHints="" />
 
             </com.google.android.material.card.MaterialCardView>
 
