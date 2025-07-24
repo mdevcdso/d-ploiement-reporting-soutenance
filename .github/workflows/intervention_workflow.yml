@@ -56,7 +56,7 @@ jobs:
         curl -X POST \
           -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
           -F "file=@${APK_PATH}" \
-          -F "app_id=${{ secrets.APP_ID }}" \
+          -F "yy" \
           "https://api.testapp.io/v1/upload" \
           || echo "Upload failed - manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
         
