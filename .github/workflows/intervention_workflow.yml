@@ -50,17 +50,83 @@ jobs:
       
     - name: Upload APK to Testapp.io
       run: |
-        echo "Uploading APK to Testapp.io..."
+        echo "🚀 Uploading APK to Testapp.io..."
         APK_PATH="app/build/outputs/apk/debug/app-debug.apk"
         
-        curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
-          -F "file=@${APK_PATH}" \
-          -F "app_id=${{ secrets.ID_APP }}" \
-          "https://api.testapp.io/v1/upload"
+        # Vérifier que l'APK existe
+        if [ ! -f "$APK_PATH" ]; then
+          echo "❌ APK not found at $APK_PATH"
+          exit 1
+        fi
         
-        echo "APK uploaded successfully to Testapp.io"
-        echo "APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
+        echo "📱 APK Size: $(ls -lh ${APK_PATH} | awk '{print $5}')"
+        
+        # Fonction de retry avec backoff
+        upload_with_retry() {
+          local max_attempts=3
+          local attempt=1
+          local delay=10
+          
+          while [ $attempt -le $max_attempts ]; do
+            echo "🔄 Attempt $attempt/$max_attempts..."
+            
+            HTTP_CODE=$(curl -X POST \
+              -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
+              -F "file=@${APK_PATH}" \
+              -F "app_id=${{ secrets.ID_APP }}" \
+              "https://api.testapp.io/v1/upload" \
+              -w "%{http_code}" \
+              -s \
+              -o response.json \
+              --max-time 300)
+            
+            echo "📊 HTTP Response Code: $HTTP_CODE"
+            
+            if [ -f response.json ]; then
+              echo "📝 Response body:"
+              cat response.json
+              echo ""
+            fi
+            
+            case $HTTP_CODE in
+              200|201)
+                echo "✅ APK uploaded successfully to Testapp.io!"
+                echo "🔗 Access your tests at: https://portal.testapp.io/i/meYGGWaYDJ"
+                return 0
+                ;;
+              502|503|504)
+                echo "⚠️  Server error ($HTTP_CODE), retrying in ${delay}s..."
+                if [ $attempt -lt $max_attempts ]; then
+                  sleep $delay
+                  delay=$((delay * 2))  # Exponential backoff
+                fi
+                ;;
+              401|403)
+                echo "❌ Authentication error ($HTTP_CODE). Check your API_TOKEN and ID_APP"
+                return 1
+                ;;
+              *)
+                echo "❌ Upload failed with HTTP code: $HTTP_CODE"
+                return 1
+                ;;
+            esac
+            
+            attempt=$((attempt + 1))
+          done
+          
+          echo "❌ All upload attempts failed"
+          return 1
+        }
+        
+        # Exécuter l'upload avec retry
+        if upload_with_retry; then
+          echo "🎉 Upload completed successfully"
+        else
+          echo "💥 Upload failed after all retries"
+          echo "ℹ️  This might be a temporary Testapp.io server issue"
+          echo "ℹ️  Build will continue but manual upload may be needed"
+          # Ne pas faire échouer le build pour un problème temporaire de Testapp.io
+        fi
         
     - name: Upload APK artifacts
       uses: actions/upload-artifact@v4
