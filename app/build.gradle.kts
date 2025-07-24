@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1"
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -60,7 +61,15 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
     implementation("com.google.firebase:firebase-analytics")
 
+    // Firebase Crashlytics
+    implementation("com.google.firebase:firebase-crashlytics")
+
+    // Firebase Analytics
     implementation("com.google.firebase:firebase-analytics")
+
+    // Firebase Performance
+    implementation("com.google.firebase:firebase-perf")
+    implementation("com.google.firebase:firebase-perf-ktx")
 
 
 }

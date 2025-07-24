@@ -57,6 +57,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mapActivityAddReport = findViewById(R.id.map_activity_add_report)
         mapActivityAddReport.setOnClickListener {
+            //throw RuntimeException("Test Crash")
             val intent = Intent(this, AddReportActivity::class.java)
             startActivity(intent)
         }
