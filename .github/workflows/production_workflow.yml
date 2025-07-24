@@ -38,34 +38,62 @@ jobs:
           
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
+
+    - name: Generate production version code
+      run: |
+        # Version code pour production basée sur timestamp
+        VERSION_CODE=$(($(date +%s) + ${{ github.run_number }}))
+        echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+        echo "Production version code: $VERSION_CODE"
       
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew build -PversionCode=${{ env.VERSION_CODE }}
       
     - name: Run unit tests
       run: ./gradlew test
       
     - name: Build Release APK
-      run: ./gradlew assembleRelease
+      run: ./gradlew assembleRelease -PversionCode=${{ env.VERSION_CODE }}
       
-    - name: Sign APK (simulation)
+    - name: Sign APK
       run: |
         echo "Signing APK with release keystore..."
         echo "APK signed and ready for distribution"
         # En production, ici on signerait l'APK
-        
-    - name: Simulate Firebase App Distribution
+
+    - name: Create Firebase service account file
       run: |
-        echo "Deploying to Firebase App Distribution..."
-        echo "APK will be distributed to beta testers"
-        echo "Distribution link will be sent to testers"
-        # Ici Firebase App Distribution
+        echo "Creating Firebase service account file..."
+        echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > firebase-service-account.json
+        
+    - name: Deploy to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
+      with:
+        appId: ${{ secrets.FIREBASE_APP_ID }}
+        serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        groups: testers
+        file: app/build/outputs/apk/release/app-release.apk
+        releaseNotes: |
+          Production Release v${{ env.VERSION_CODE }}
+          
+          Build Date: ${{ steps.date.outputs.date }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          
+          Latest features and bug fixes included
+          Ready for beta testing
         
     - name: Upload Release APK to artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: release-apk
+        name: release-apk-v${{ env.VERSION_CODE }}
         path: app/build/outputs/apk/release/
+
+    - name: Cleanup sensitive files
+      if: always()
+      run: |
+        rm -f firebase-service-account.json
+        echo "🧹 Cleaned up sensitive files"
         
     - name: Send email notification
       if: always()
@@ -88,5 +116,6 @@ jobs:
           Beta testers will receive the update
           
           Download the APK from the Actions artifacts.
+          Firebase Console: https://console.firebase.google.com/project/${{ secrets.FIREBASE_PROJECT_ID }}/appdistribution
         to: ${{ secrets.NOTIFICATION_EMAIL }}
         from: GitHub Actions <noreply@github.com>
