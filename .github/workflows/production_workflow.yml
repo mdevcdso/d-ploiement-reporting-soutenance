@@ -64,9 +64,9 @@ jobs:
         ls -la app/build/outputs/apk/release/ || echo "Release directory not found"
         echo ""
         echo "APK file details:"
-        if [ -f "app/build/outputs/apk/release/app-release.apk" ]; then
-          echo "✅ APK found: app/build/outputs/apk/release/app-release.apk"
-          echo "📊 Size: $(ls -lh app/build/outputs/apk/release/app-release.apk | awk '{print $5}')"
+        if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
+          echo "✅ APK found: app/build/outputs/apk/release/app-release-unsigned.apk"
+          echo "📊 Size: $(ls -lh app/build/outputs/apk/release/app-release-unsigned.apk | awk '{print $5}')"
         else
           echo "❌ APK not found at expected location"
           echo "Looking for alternative names..."
@@ -85,7 +85,7 @@ jobs:
         appId: ${{ secrets.FIREBASE_APP_ID }}
         serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         groups: testers
-        file: app/build/outputs/apk/release/app-release.apk
+        file: app/build/outputs/apk/release/app-release-unsigned.apk  # ← Changement ici
         releaseNotes: |
           🚀 Production Release v${{ env.VERSION_CODE }}
           
@@ -100,7 +100,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: release-apk-v${{ env.VERSION_CODE }}
-        path: app/build/outputs/apk/release/
+        path: app/build/outputs/apk/release/app-release-unsigned.apk
         
     - name: Send email notification
       if: always()
