@@ -63,113 +63,110 @@ jobs:
         
         # Fonction de retry avec backoff
         upload_with_retry() {
-          local max_attempts=4  # Augmenté à 4 tentatives
+          local max_attempts=3
           local attempt=1
-          local delay=15        # Délai initial plus long
+          local delay=30
           
           while [ $attempt -le $max_attempts ]; do
             echo "🔄 Attempt $attempt/$max_attempts..."
             
-            # Ajouter User-Agent et Accept headers
+            # Commande curl corrigée (une seule ligne)
             HTTP_CODE=$(curl -X POST \
               -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
               -H "User-Agent: GitHub-Actions/1.0" \
               -H "Accept: application/json" \
               -F "file=@${APK_PATH}" \
-              -F "app_id=${{ secrets.ID_APP }}" \
+              -F "app_id=${{ secrets.APP_ID }}" \
               "https://api.testapp.io/v1/upload" \
-              -w "%{http_code}" \
-              -s \
-              -o response.json \
-              --max-time 600 \     # Augmenté à 10 minutes
+              --max-time 300 \
               --connect-timeout 30 \
-              --retry 0)           # Pas de retry automatique curl
+              --write-out "%{http_code}" \
+              --silent \
+              --output response.json)
             
             echo "📊 HTTP Response Code: $HTTP_CODE"
             
-            # Vérifier si la réponse contient du HTML (erreur serveur)
+            # Vérifier le contenu de la réponse
             if [ -f response.json ]; then
+              echo "📝 Response content:"
               if grep -q "<html>" response.json 2>/dev/null; then
-                echo "📝 Server returned HTML error page (502/503 gateway error)"
-                echo "🔍 First line: $(head -1 response.json)"
+                echo "⚠️  Received HTML error page instead of JSON"
+                head -3 response.json
               else
-                echo "📝 Response body:"
+                echo "✅ JSON Response:"
                 cat response.json
               fi
               echo ""
             fi
             
-            case $HTTP_CODE in
-              200|201)
+            # Gestion des codes de retour
+            case "$HTTP_CODE" in
+              "200"|"201")
                 echo "✅ APK uploaded successfully to Testapp.io!"
                 echo "🔗 Access your tests at: https://portal.testapp.io/i/meYGGWaYDJ"
                 return 0
                 ;;
-              502|503|504|520|521|522|523|524)
-                echo "⚠️  Server/Gateway error ($HTTP_CODE) - Testapp.io infrastructure issue"
-                if [ $attempt -lt $max_attempts ]; then
-                  echo "⏳ Waiting ${delay}s before retry..."
-                  sleep $delay
-                  delay=$((delay + 15))  # Incréments de 15s
-                fi
+              "502"|"503"|"504"|"520"|"521"|"522"|"523"|"524")
+                echo "⚠️  Server error ($HTTP_CODE) - Testapp.io may be down"
                 ;;
-              401)
-                echo "❌ Authentication error: Invalid API_TOKEN"
-                echo "🔍 Check your API_TOKEN secret in GitHub"
+              "401")
+                echo "❌ Authentication failed - Check API_TOKEN"
                 return 1
                 ;;
-              403)
-                echo "❌ Forbidden: Check your ID_APP or API permissions"
+              "403")
+                echo "❌ Access forbidden - Check APP_ID"
                 return 1
                 ;;
-              413)
-                echo "❌ File too large (18M). Testapp.io may have size limits"
+              "413")
+                echo "❌ File too large (consider reducing APK size)"
                 return 1
                 ;;
-              429)
-                echo "⚠️  Rate limited. Waiting longer..."
-                if [ $attempt -lt $max_attempts ]; then
-                  sleep 60  # Attendre 1 minute pour rate limit
-                fi
-                ;;
-              000)
-                echo "❌ Connection failed completely (timeout or network issue)"
-                if [ $attempt -lt $max_attempts ]; then
-                  sleep $delay
-                fi
+              "000"|"")
+                echo "❌ Connection failed or timeout"
                 ;;
               *)
-                echo "❌ Upload failed with HTTP code: $HTTP_CODE"
-                if [ $attempt -lt $max_attempts ]; then
-                  sleep $delay
-                fi
+                echo "❌ Unexpected HTTP code: $HTTP_CODE"
                 ;;
             esac
+            
+            if [ $attempt -lt $max_attempts ]; then
+              echo "⏳ Waiting ${delay}s before retry..."
+              sleep $delay
+              delay=$((delay + 30))
+            fi
             
             attempt=$((attempt + 1))
           done
           
-          echo "❌ All $max_attempts upload attempts failed"
           return 1
         }
         
-        # Exécuter l'upload avec retry
-        echo "🌐 Testing Testapp.io API availability..."
-        if curl -s --max-time 10 https://api.testapp.io/health >/dev/null 2>&1; then
-          echo "✅ Testapp.io API seems reachable"
+        # Test de connectivité simple
+        echo "🌐 Checking Testapp.io connectivity..."
+        if ping -c 1 api.testapp.io >/dev/null 2>&1; then
+          echo "✅ Can reach api.testapp.io"
         else
-          echo "⚠️  Testapp.io API may be experiencing issues"
+          echo "⚠️  Cannot ping api.testapp.io"
         fi
         
+        # Tentative d'upload
         if upload_with_retry; then
-          echo "🎉 Upload completed successfully"
+          echo "🎉 Upload successful!"
         else
-          echo "💥 Upload failed after all retries"
-          echo "ℹ️  This appears to be a Testapp.io infrastructure issue (502 errors)"
-          echo "ℹ️  Your APK is still available in GitHub Actions artifacts"
-          echo "ℹ️  You can manually upload at: https://portal.testapp.io/i/meYGGWaYDJ"
-          # Ne pas faire échouer le build
-          echo "⏭️  Continuing workflow..."
+          echo "💥 Upload failed - Testapp.io seems to have persistent issues"
+          echo "📋 Troubleshooting steps:"
+          echo "   1. Check Testapp.io status page"
+          echo "   2. Verify API_TOKEN and APP_ID secrets"
+          echo "   3. Manual upload: https://portal.testapp.io/i/meYGGWaYDJ"
+          echo "   4. Download APK from GitHub Actions artifacts"
+          
+          # Pour le debugging - vérifier les secrets (sans les afficher)
+          if [ -z "${{ secrets.API_TOKEN }}" ]; then
+            echo "⚠️  API_TOKEN appears to be empty"
+          fi
+          if [ -z "${{ secrets.APP_ID }}" ]; then
+            echo "⚠️  APP_ID appears to be empty"
+          fi
         fi
         
     - name: Upload APK artifacts
