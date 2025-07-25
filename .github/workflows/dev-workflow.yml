@@ -46,7 +46,7 @@ jobs:
     - name: Run unit tests
       run: ./gradlew test --stacktrace --warning-mode all --continue || echo "Tests failed but continuing"
         
-    - name: Send email notification
+    - name: Send email notifications
       if: always()
       uses: dawidd6/action-send-mail@v3
       with:
