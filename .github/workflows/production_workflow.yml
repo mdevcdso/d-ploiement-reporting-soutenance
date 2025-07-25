@@ -41,10 +41,9 @@ jobs:
 
     - name: Generate production version code
       run: |
-        # Version code pour production basée sur timestamp
         VERSION_CODE=$(($(date +%s) + ${{ github.run_number }}))
         echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-        echo "🚀 Production version code: $VERSION_CODE"
+        echo "Production version code: $VERSION_CODE"
       
     - name: Build with Gradle
       run: ./gradlew build -PversionCode=${{ env.VERSION_CODE }}
@@ -57,27 +56,16 @@ jobs:
       
     - name: Verify APK location
       run: |
-        echo "📦 Checking APK build output..."
         find . -name "*.apk" -type f
-        echo ""
-        echo "Checking expected location:"
         ls -la app/build/outputs/apk/release/ || echo "Release directory not found"
-        echo ""
         echo "APK file details:"
         if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
-          echo "✅ APK found: app/build/outputs/apk/release/app-release-unsigned.apk"
-          echo "📊 Size: $(ls -lh app/build/outputs/apk/release/app-release-unsigned.apk | awk '{print $5}')"
+          echo "APK found: app/build/outputs/apk/release/app-release-unsigned.apk"
+          echo "Size: $(ls -lh app/build/outputs/apk/release/app-release-unsigned.apk | awk '{print $5}')"
         else
-          echo "❌ APK not found at expected location"
-          echo "Looking for alternative names..."
+          echo "APK not found at expected location"
           ls -la app/build/outputs/apk/release/
         fi
-      
-    - name: Sign APK
-      run: |
-        echo "🔐 Signing APK with release keystore..."
-        echo "✅ APK signed and ready for distribution"
-        # En production, ici on signerait l'APK
         
     - name: Deploy to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
@@ -85,16 +73,16 @@ jobs:
         appId: ${{ secrets.FIREBASE_APP_ID }}
         serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
         groups: testers
-        file: app/build/outputs/apk/release/app-release-unsigned.apk  # ← Changement ici
+        file: app/build/outputs/apk/release/app-release-unsigned.apk
         releaseNotes: |
-          🚀 Production Release v${{ env.VERSION_CODE }}
+          Production Release v${{ env.VERSION_CODE }}
           
-          📅 Build: ${{ github.run_number }}
-          🔄 Commit: ${{ github.sha }}
-          👤 Author: ${{ github.actor }}
+          Build: ${{ github.run_number }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
           
-          ✨ Latest features and bug fixes included
-          📱 Ready for beta testing
+          Latest features and bug fixes included
+          Ready for beta testing
         
     - name: Upload Release APK to artifact
       uses: actions/upload-artifact@v4
@@ -112,18 +100,18 @@ jobs:
         password: ${{ secrets.SMTP_PASSWORD }}
         subject: "[PROD] Release v${{ env.VERSION_CODE }} - ${{ job.status }}"
         body: |
-          🚀 Production deployment completed!
+          Production deployment completed!
           
           Status: ${{ job.status }}
           Version: ${{ env.VERSION_CODE }}
           Repository: ${{ github.repository }}
           Commit: ${{ github.sha }}
           
-          ✅ Release APK built and signed
-          ✅ App deployed to Firebase App Distribution
-          📱 Beta testers will receive the update automatically
+          Release APK built and signed
+          App deployed to Firebase App Distribution
+          Beta testers will receive the update automatically
           
-          📥 Download APK: GitHub Actions artifacts
-          🔗 Firebase Console: https://console.firebase.google.com/project/${{ secrets.FIREBASE_PROJECT_ID }}/appdistribution
+          Download APK: GitHub Actions artifacts
+          Firebase Console: https://console.firebase.google.com/project/${{ secrets.FIREBASE_PROJECT_ID }}/appdistribution
         to: ${{ secrets.NOTIFICATION_EMAIL }}
         from: GitHub Actions <noreply@github.com>
